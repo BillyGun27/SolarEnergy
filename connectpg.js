@@ -1,5 +1,5 @@
 var Pool = require('pg')
-var connectionString = 'postgresql://postgres:273109@localhost:5432/postgres';//process.env.DATABASE_URL;//
+var connectionString = process.env.DATABASE_URL;//'postgresql://postgres:273109@localhost:5432/postgres';//
 var pool = new Pool.Client(connectionString);
 
 pool.connect();
