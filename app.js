@@ -77,6 +77,7 @@ function Sendpgsql(table,content,message,ind,type){
   console.log(table);
   if(table=="energy"){
     power = JSON.parse( message.toString() ); 
+    checkmqtt =  power.v;
     var query = {
       // give the query a unique name
       name: table,
