@@ -22,7 +22,7 @@ client.on('connect', function () {
   client.subscribe('solarenergy/energy/battery')
  
  // client.publish('solarenergy/machine/battery','0')
- client.publish('solarenergy/energy/pln','{v:5,i:0.5}')
+ client.publish('solarenergy/energy/pln','{"v":5,"i":0.5}')
 })
  
 
@@ -57,7 +57,7 @@ client.on('message', function (topic, message) {
     type = "pln";
    // checkmqtt = topic +"="+message.toString();
  // console.log(checkmqtt);
-    Sendpgsql(table,content,message,ind);
+    Sendpgsql(table,content,message,ind,type);
      break;
     case "solarenergy/energy/battery":
      table = "energy"
@@ -76,8 +76,8 @@ client.on('message', function (topic, message) {
 function Sendpgsql(table,content,message,ind,type){
   console.log(table);
   if(table=="energy"){
-    power = JSON.parse( message.toString() ); 
-    checkmqtt =  message.toString();
+   // power = JSON.parse( message.toString() ); 
+    //checkmqtt =  power.v;
     var query = {
       // give the query a unique name
       name: table,
