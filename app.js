@@ -16,10 +16,11 @@ const pool = require("./connectpg");
 
  
 client.on('connect', function () {
-  client.subscribe('solarenergy/machine')
+  client.subscribe('solarenergy/machine/pln')
+  client.subscribe('solarenergy/machine/battery')
   client.subscribe('solarenergy/sensor')
  // client.publish('sensor', '100')
-  client.publish('solarenergy/machine','0')
+  client.publish('solarenergy/machine/battery','0')
   //client.publish('machine','1')
 })
  
@@ -35,12 +36,20 @@ client.on('message', function (topic, message) {
 
  var table ,content;
  switch (topic) {
-   case "solarenergy/machine":
+   case "solarenergy/machine/pln":
     table = "mesin"
     content = "status_mesin";
+    type = "pln";
   //  console.log(topic,"+",message.toString());
     Sendpgsql(table,content,message,ind);
      break;
+    case "solarenergy/machine/battery":
+     table = "mesin"
+     content = "status_mesin";
+     type = "battery";
+   //  console.log(topic,"+",message.toString());
+     Sendpgsql(table,content,message,ind);
+      break;
    case "solarenergy/sensor":
     table = "sensor"
     content = "do_value";
@@ -59,8 +68,8 @@ function Sendpgsql(table,content,message,ind){
   var query = {
     // give the query a unique name
     name: table,
-    text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time) VALUES ($1,$2,$3) ',
-    values: [  message.toString()  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss')]//heroku
+    text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time,tipe_mesin) VALUES ($1,$2,$3,$4) ',
+    values: [  message.toString()  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss') , type ]//heroku
     // values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]//my comp
   }
 
@@ -126,8 +135,8 @@ app.get('/testpg', function(request, response, next) {
   var query = {
     // give the query a unique name
     name: "mesin",
-    text: 'INSERT INTO mesin (status_mesin ,receive_date,receive_time) VALUES ($1,$2,$3) ',
-    values: [  '0'  ,ind.format('MM/DD/YYYY'),ind.format('HH:mm:ss')]
+    text: 'INSERT INTO mesin (status_mesin ,receive_date,receive_time,tipe_mesin) VALUES ($1,$2,$3,$4) ',
+    values: [  '0'  ,ind.format('MM/DD/YYYY'),ind.format('HH:mm:ss'),'pln']
   }
   
    // callback
