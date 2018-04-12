@@ -16,10 +16,10 @@ const pool = require("./connectpg");
 
  
 client.on('connect', function () {
-  client.subscribe('machine')
-  client.subscribe('sensor')
+  client.subscribe('solarenergy/machine')
+  client.subscribe('solarenergy/sensor')
  // client.publish('sensor', '100')
- // client.publish('machine','0')
+  client.publish('solarenergy/machine','0')
   //client.publish('machine','1')
 })
  
@@ -35,13 +35,13 @@ client.on('message', function (topic, message) {
 
  var table ,content;
  switch (topic) {
-   case "machine":
+   case "solarenergy/machine":
     table = "mesin"
     content = "status_mesin";
   //  console.log(topic,"+",message.toString());
     Sendpgsql(table,content,message,ind);
      break;
-   case "sensor":
+   case "solarenergy/sensor":
     table = "sensor"
     content = "do_value";
    // checkmqtt = topic +"="+message.toString();
