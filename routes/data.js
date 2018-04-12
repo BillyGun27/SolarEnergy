@@ -53,12 +53,12 @@ pool.query(query, (err, res) => {
 });
 
 /* GET home page. */
-router.get('/meteran', function(request, response, next) {
+router.get('/watt/solar', function(request, response, next) {
   // callback
   var result;//request.body.min//request.query.min 
 
   var query = {
-    text: "SELECT id,do_value, to_char(receive_date, 'MM/DD/YY') AS receive_date,receive_time FROM sensor ORDER BY id DESC LIMIT 1 ",
+    text: "SELECT id,tipe_energy , v::float*i::float AS watt, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'pln' ORDER BY id DESC LIMIT 1",
   }
 pool.query(query, (err, res) => {
  if (err) {

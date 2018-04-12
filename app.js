@@ -22,7 +22,7 @@ client.on('connect', function () {
   client.subscribe('solarenergy/energy/battery')
  
  // client.publish('solarenergy/machine/battery','0')
- client.publish('solarenergy/energy/pln','{"v":5,"i":0.5}')
+ client.publish('solarenergy/energy/battery','{"v":5,"i":0.5}')
 })
  
 
