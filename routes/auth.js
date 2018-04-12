@@ -17,7 +17,7 @@ router.post('/register', function(request, response, next) {
   var query = {
     // give the query a unique name
    // name: 'get_sensor',
-    text: 'INSERT INTO user (email,password) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+    text: 'INSERT INTO user_account (email,password) VALUES ($1, $2) ON CONFLICT DO NOTHING',
     values: [request.body.email, hashedPassword]
   }
 
