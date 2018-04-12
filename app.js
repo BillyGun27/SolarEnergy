@@ -18,10 +18,11 @@ const pool = require("./connectpg");
 client.on('connect', function () {
   client.subscribe('solarenergy/machine/pln')
   client.subscribe('solarenergy/machine/battery')
-  client.subscribe('solarenergy/sensor')
- // client.publish('sensor', '100')
-  client.publish('solarenergy/machine/battery','0')
-  //client.publish('machine','1')
+  client.subscribe('solarenergy/energy/pln')
+  client.subscribe('solarenergy/energy/battery')
+ 
+ // client.publish('solarenergy/machine/battery','0')
+ client.publish('solarenergy/energy/pln','{v:5,i:0.5}')
 })
  
 
@@ -50,28 +51,49 @@ client.on('message', function (topic, message) {
    //  console.log(topic,"+",message.toString());
      Sendpgsql(table,content,message,ind);
       break;
-   case "solarenergy/sensor":
-    table = "sensor"
-    content = "do_value";
+   case "solarenergy/energy/pln":
+    table = "energy"
+    content = "v,i";
+    type = "pln";
    // checkmqtt = topic +"="+message.toString();
  // console.log(checkmqtt);
     Sendpgsql(table,content,message,ind);
      break;
+    case "solarenergy/energy/battery":
+     table = "energy"
+     content = "v,i";
+     type = "battery";
+    // checkmqtt = topic +"="+message.toString();
+  // console.log(checkmqtt);
+     Sendpgsql(table,content,message,ind,type);
+      break;
    
  }
   
   // client.end()
 })
 
-function Sendpgsql(table,content,message,ind){
+function Sendpgsql(table,content,message,ind,type){
   console.log(table);
-  var query = {
-    // give the query a unique name
-    name: table,
-    text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time,tipe_mesin) VALUES ($1,$2,$3,$4) ',
-    values: [  message.toString()  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss') , type ]//heroku
-    // values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]//my comp
+  if(table=="energy"){
+    power = JSON.parse( message.toString() ); 
+    var query = {
+      // give the query a unique name
+      name: table,
+      text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time,tipe_mesin) VALUES ($1,$2,$3,$4,$5) ',
+      values: [ power.v, power.i  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss') , type ]//heroku
+      // values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]//my comp
+    }
+  }else{
+    var query = {
+      // give the query a unique name
+      name: table,
+      text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time,tipe_mesin) VALUES ($1,$2,$3,$4) ',
+      values: [  message.toString()  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss') , type ]//heroku
+      // values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]//my comp
+    }
   }
+ 
 
   // callback
 pool.query(query, (err, res) => {
