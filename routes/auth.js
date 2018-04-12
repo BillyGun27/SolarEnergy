@@ -44,7 +44,7 @@ router.post('/login', function(request, response, next) {
     var query = {
         // give the query a unique name
        // name: 'get_sensor',
-        text: 'SELECT * FROM user WHERE email=$1',
+        text: 'SELECT * FROM user_account WHERE email=$1',
         values: [request.body.email]
       }
 
