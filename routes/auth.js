@@ -56,7 +56,7 @@ router.post('/login', function(request, response, next) {
         } else {
             if(res.rowCount){
             //  result = res;//.rows.password;
-            out = res;
+            out = res.rows;
             console.log(res.rows);
             console.log(res.rows[0].email);
             console.log(res.rows[0].password);
