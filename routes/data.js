@@ -53,12 +53,14 @@ pool.query(query, (err, res) => {
 });
 
 /* GET home page. */
-router.get('/watt/solar', function(request, response, next) {
+router.get('/watt/:tipe', function(request, response, next) {
   // callback
   var result;//request.body.min//request.query.min 
 
   var query = {
-    text: "SELECT id,tipe_energy , v::float*i::float AS watt, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'pln' ORDER BY id DESC LIMIT 1",
+    name: request.params.tipe ,
+    text: "SELECT id,tipe_energy , v::float*i::float AS watt, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = $1 ORDER BY id DESC LIMIT 1",
+    values: [request.params.tipe]
   }
 pool.query(query, (err, res) => {
  if (err) {
@@ -106,11 +108,13 @@ ON x1.id = x2.id +1
  */
 
 /* GET home page. */
-router.get('/mesin', function(request, response, next) {
-  // callback
+router.get('/mesin/:tipe', function(request, response, next) {
+  // callback//req.params
   var result;
   var query = {
-    text: "SELECT x1.status_mesin AS status_awal,x1.receive_time AS time_awal ,to_char(x1.receive_date, 'MM/DD/YY') AS date_awal, x2.status_mesin AS status_akhir,x2.receive_time AS time_akhir  ,to_char(x2.receive_date, 'MM/DD/YY') AS date_akhir, to_char((y2-y1),'DDD HH24:MI:SS') AS diff FROM public.mesin AS x1 ,public.mesin AS x2 ,to_timestamp(x1.receive_date||' '||x1.receive_time,'YYYY/FMMM/FMDD FMHH24:FMMI:FMSS' ) AS y1,to_timestamp(x2.receive_date||' '||x2.receive_time,'YYYY/FMMM/FMDD FMHH24:FMMI:FMSS' ) AS y2 WHERE x1.id +1 = x2.id "//,
+    name: request.params.tipe ,
+    text: "SELECT x1.status_mesin AS status_awal,x1.receive_time AS time_awal ,to_char(x1.receive_date, 'MM/DD/YY') AS date_awal, x2.status_mesin AS status_akhir,x2.receive_time AS time_akhir  ,to_char(x2.receive_date, 'MM/DD/YY') AS date_akhir, to_char((y2-y1),'DDD HH24:MI:SS') AS diff FROM public.mesin AS x1 ,public.mesin AS x2 ,to_timestamp(x1.receive_date||' '||x1.receive_time,'YYYY/FMMM/FMDD FMHH24:FMMI:FMSS' ) AS y1,to_timestamp(x2.receive_date||' '||x2.receive_time,'YYYY/FMMM/FMDD FMHH24:FMMI:FMSS' ) AS y2 WHERE x1.id +1 = x2.id  AND x1.tipe_mesin=$1 AND x2.tipe_mesin=$1 ",
+    values: [request.params.tipe]
   }
 pool.query(query, (err, res) => {
  if (err) {
@@ -172,84 +176,5 @@ pool.query(query, (err, res) => {
 
 
 
-router.post('/upload', formidable(), function(request, response, next) {
-  // callback
-console.log(JSON.stringify(request.files) );
-var file = request.files.thumbnail;
-//var ext = str.split(".");
-oldpath = file.path;
-newpath = path.join( __dirname  ,'../xls/'+ "sample_data.xls");
-mv(oldpath, newpath, function(err) {
-  // done. it tried fs.rename first, and then falls back to
-  // piping the source file to the dest file and then unlinking
-  // the source file.
-});
-//response.send(newpath);
-  response.redirect('/home');
-});
-
-var node_xj = require("xlsx-to-json-lc");
-var jsonQuery = require('json-query');
-
-router.get('/xls', function(request, response, next) {
-  // callback
-  var data;
-  
-  node_xj({
-    input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
-    output: null, // output json 
-    lowerCaseHeaders:true
-  }, function(err, result) {
-    if(err) {
-      data = err;
-      console.error(err);
-    } else {
-      data = result;
-      console.log(result);
-    }
-    /**
-     * var data = {
-  people: [
-    {name: 'Matt', country: 'NZ'},
-    {name: 'Pete', country: 'AU'},
-    {name: 'Mikey', country: 'NZ'}
-  ]
-}
-   */  
-//"date":"12/21/17"dat =
-datmin = request.query.min;//request.body.min; 
-datmax = request.query.max;//request.body.max;
-    var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
-      data: data
-    }).value
-
-    response.send(output); 
-  
-  });
- 
-});
-/*
-router.get('/xls', function(request, response, next) {
-  // callback
-  var data;
-  
-  node_xj({
-    input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
-    output: null, // output json 
-    lowerCaseHeaders:true
-  }, function(err, result) {
-    if(err) {
-      data = err;
-      console.error(err);
-    } else {
-      data = result;
-      console.log(result);
-    }
- 
-    response.send(data);  
-  });
-
- 
-});*/
 
 module.exports = router;
