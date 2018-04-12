@@ -11,16 +11,13 @@ router.get('/', function(request, response, next) {
   response.send("hello");
 });
 
-router.post('/post', function(request, response, next) {
-  response.send(request.body.email);
-});
 
 router.post('/register', function(request, response, next) {
   var hashedPassword = passwordHash.generate(request.body.password);
   var query = {
     // give the query a unique name
    // name: 'get_sensor',
-    text: 'INSERT INTO user_account (email,password) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+    text: 'INSERT INTO user (email,password) VALUES ($1, $2) ON CONFLICT DO NOTHING',
     values: [request.body.email, hashedPassword]
   }
 
@@ -41,12 +38,13 @@ router.post('/register', function(request, response, next) {
     });
 
 });
+
 var out;
 router.post('/login', function(request, response, next) {
     var query = {
         // give the query a unique name
        // name: 'get_sensor',
-        text: 'SELECT * FROM user_account WHERE email=$1',
+        text: 'SELECT * FROM user WHERE email=$1',
         values: [request.body.email]
       }
 
@@ -67,7 +65,7 @@ router.post('/login', function(request, response, next) {
                  //.rows[0];
 
                  var payload = {
-                   "code": "bubble",
+                   "code": "solar",
                   "id" : res.rows[0].id,
                   "email": res.rows[0].email
                 };
@@ -123,15 +121,4 @@ router.post('/login', function(request, response, next) {
   });
 
 
-
-
-/*
- // decode 
- jwt.decode(secret, token, function (err_, decodedPayload, decodedHeader) {
-  if (err) {
-    console.error(err.name, err.message);
-  } else {
-    console.log(decodedPayload, decodedHeader);
-  }
-});*/
 module.exports = router;
