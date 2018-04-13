@@ -37,12 +37,73 @@ pool.query(query, (err, res) => {
 
 });
 
-router.get('/view', function(request, response, next) {
+router.post('/switch/:id', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    text: "UPDATE switch SET status_switch = CASE WHEN status_switch = 0 then 1 WHEN status_switch = 1 then 0 ELSE 0 END WHERE id=$1;",
+    values: [request.body.nama]
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+});
+
+router.get('/view/all', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
     text: "SELECT * FROM switch ;"
   }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+});
+
+router.get('/view/:id', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    text: "SELECT * FROM switch WHERE id = $1 ;",
+    values: [request.params.id]
+  }
+
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+});
+
+router.get('/count', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    text: "SELECT status_switch, COUNT(status_switch) AS jumlah FROM public.switch GROUP BY status_switch ;"
+  }
+
 pool.query(query, (err, res) => {
  if (err) {
      result = err.stack;
