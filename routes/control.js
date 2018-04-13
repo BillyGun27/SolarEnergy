@@ -37,6 +37,26 @@ pool.query(query, (err, res) => {
 
 });
 
+router.post('/update', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    text: "UPDATE switch SET nama_switch = $2 WHERE id=$1;",
+    values: [request.body.id,request.body.nama]
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result="success";//res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+});
+
 router.get('/switch/:id', function(request, response, next) {
   // callback//req.params
   var result;
@@ -49,7 +69,7 @@ pool.query(query, (err, res) => {
      result = err.stack;
    console.log(err.stack)
  } else {
-     result=res.rows;//.rows[0];
+     result="success";//res.rows;//.rows[0];
    console.log(res)
  }
  response.send(result);   
