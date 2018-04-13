@@ -22,7 +22,7 @@ router.get('/', function(request, response, next) {
 router.get('/kwh/:timepart/:detail?', function(request, response, next) {
   if(request.params.detail == undefined){
     if(request.params.timepart == "current"){
-      output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy GROUP BY day,month,year,receive_date,tipe_energy ORDER BY receive_date DESC LIMIT 1";
+      output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy GROUP BY day,month,year,receive_date,tipe_energy ORDER BY receive_date DESC LIMIT 2 ";
     }else if(request.params.timepart == "day"){
       output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date DESC ";
     }else if(request.params.timepart == "week"){
@@ -82,7 +82,7 @@ router.get('/watt/:tipe?', function(request, response, next) {
     }
   }else{
     var query = {
-      text: "SELECT id,tipe_energy , v::float*i::float AS watt, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = $1 ORDER BY id DESC LIMIT 1",     
+      text: "SELECT id,tipe_energy , v::float*i::float AS watt, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = $1 ORDER BY tipe_energy ,receive_date DESC ,receive_time DESC LIMIT 1",     
       values: [request.params.tipe]
     }
   }
