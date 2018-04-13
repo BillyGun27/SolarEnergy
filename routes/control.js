@@ -42,7 +42,7 @@ router.post('/switch/:id', function(request, response, next) {
   var result;
   var query = {
     text: "UPDATE switch SET status_switch = CASE WHEN status_switch = 0 then 1 WHEN status_switch = 1 then 0 ELSE 0 END WHERE id=$1;",
-    values: [request.body.nama]
+    values: [request.params.id]
   }
 pool.query(query, (err, res) => {
  if (err) {
