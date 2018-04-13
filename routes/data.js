@@ -75,7 +75,7 @@ router.get('/watt/:tipe?', function(request, response, next) {
   // callback
   var result;//request.body.min//request.query.min 
 
-  if(request.params.detail == undefined){
+  if(request.params.tipe == undefined){
     var query = {
       text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy , v::float*i::float AS watt, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time  FROM energy ORDER BY tipe_energy ,receive_date DESC,receive_time DESC",
       //values: [request.params.tipe]
