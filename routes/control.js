@@ -41,8 +41,7 @@ router.get('/view', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT * FROM switch ;",
-    values: [request.params.nama]
+    text: "SELECT * FROM switch ;"
   }
 pool.query(query, (err, res) => {
  if (err) {
