@@ -37,7 +37,7 @@ pool.query(query, (err, res) => {
 
 });
 
-router.post('/switch/:id', function(request, response, next) {
+router.get('/switch/:id', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
