@@ -17,12 +17,12 @@ router.get('/', function(request, response, next) {
 
 });
 
-router.get('/insert/:nama', function(request, response, next) {
+router.post('/insert', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
     text: "INSERT INTO public.switch(nama_switch, status_switch) VALUES ( $1 , '0'); ",
-    values: [request.params.nama]
+    values: [request.body.nama]
   }
 pool.query(query, (err, res) => {
  if (err) {
