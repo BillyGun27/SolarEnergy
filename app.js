@@ -127,6 +127,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var auth = require('./routes/auth');
 var data = require('./routes/data');
+var control = require('./routes/control');
 
 var app = express();
 
@@ -148,6 +149,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/auth', auth);
 app.use('/data',data);
+app.use('/control',control);
 
 app.get('/mqtt', function(request, response, next) {
   response.send(checkmqtt);
