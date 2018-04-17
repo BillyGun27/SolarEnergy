@@ -66,7 +66,7 @@ router.get('/switch/:id', function(request, response, next) {
   }
 pool.query(query, (err, res) => {
  if (err) {
-     result = err.stack;
+     result ="error";// err.stack;
    console.log(err.stack)
  } else {
      result="success";//res.rows;//.rows[0];
@@ -81,7 +81,7 @@ router.get('/view/all', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT * FROM switch ORDER BY id ASC;"
+    text: "SELECT id, nama_switch, status_switch,priority FROM public.main_switch  UNION SELECT id, nama_switch, status_switch,priority FROM public.switch ORDER BY priority,id "
   }
 pool.query(query, (err, res) => {
  if (err) {
@@ -91,7 +91,9 @@ pool.query(query, (err, res) => {
      result=res.rows;//.rows[0];
    console.log(res)
  }
- response.send(result);   
+
+  
+  response.send(result);   
 })
 
 });
