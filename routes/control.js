@@ -81,19 +81,34 @@ router.get('/view/all', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT id, nama_switch, status_switch,priority FROM public.main_switch  UNION SELECT id, nama_switch, status_switch,priority FROM public.switch ORDER BY priority,id "
+    text: "SELECT id, nama_switch, status_switch FROM switch ORDER BY id ASC;"
   }
 pool.query(query, (err, res) => {
  if (err) {
-     result = err.stack;
+     appliance = err.stack;
    console.log(err.stack)
  } else {
-     result=res.rows;//.rows[0];
+     appliance =res.rows;//.rows[0];
    console.log(res)
  }
 
+        var query = {
+          text: "SELECT id, nama_switch, status_switch FROM main_switch ORDER BY id ASC;"
+        }
+        pool.query(query, (err, res) => {
+        if (err) {
+          power = err.stack;
+        console.log(err.stack)
+        } else {
+          power =res.rows;//.rows[0];
+        console.log(res)
+        }
+
+          result = {power:power , appliance:appliance};
+        response.send(result);   
+        })
   
-  response.send(result);   
+ // response.send(result);   
 })
 
 });
