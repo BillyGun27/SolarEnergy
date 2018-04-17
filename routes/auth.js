@@ -11,6 +11,30 @@ router.get('/', function(request, response, next) {
   response.send("hello");
 });
 
+function InsertMainSwitch(){
+  var query = {
+    // give the query a unique name
+   // name: 'get_sensor',
+    text: "INSERT INTO main_switch(user_id, nama_switch, status_switch) VALUES ( (SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1), 'Solar Power', '0');"
+          +"INSERT INTO main_switch( user_id, nama_switch, status_switch) VALUES ( (SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1), 'Grid PLN', '0');",
+  }
+
+  pool.query(query, (err, res) => {
+      if (err) {
+          result = err.stack;
+        console.log(err.stack)
+      } else {
+          if(res.rowCount){
+              result=true;//.rows[0];
+          }else{
+              result = false;
+          }
+          
+        //console.log(res)
+      }
+    });
+    
+}
 
 router.post('/register', function(request, response, next) {
   var hashedPassword = passwordHash.generate(request.body.password);
@@ -28,6 +52,8 @@ router.post('/register', function(request, response, next) {
       } else {
           if(res.rowCount){
               result=true;//.rows[0];
+
+              InsertMainSwitch();
           }else{
               result = false;
           }
