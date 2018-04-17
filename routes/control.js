@@ -57,13 +57,21 @@ pool.query(query, (err, res) => {
 
 });
 
-router.get('/switch/:id', function(request, response, next) {
+router.get('/switch/:type/:id', function(request, response, next) {
   // callback//req.params
   var result;
-  var query = {
-    text: "UPDATE switch SET status_switch = CASE WHEN status_switch = 0 then 1 WHEN status_switch = 1 then 0 ELSE 0 END WHERE id=$1;",
-    values: [request.params.id]
+  if(request.params.type == 'power'){
+    var query = {
+      text: "UPDATE main_switch SET status_switch = CASE WHEN status_switch = 0 then 1 WHEN status_switch = 1 then 0 ELSE 0 END WHERE id=$1;",
+      values: [request.params.id]
+    }
+  }else if(request.params.type == 'appliance'){
+    var query = {
+      text: "UPDATE switch SET status_switch = CASE WHEN status_switch = 0 then 1 WHEN status_switch = 1 then 0 ELSE 0 END WHERE id=$1;",
+      values: [request.params.id]
+    }
   }
+ 
 pool.query(query, (err, res) => {
  if (err) {
      result ="error";// err.stack;
