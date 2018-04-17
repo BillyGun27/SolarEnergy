@@ -127,7 +127,62 @@ pool.query(query, (err, res) => {
 
 });
 
+router.post('/upload', formidable(), function(request, response, next) {
+  // callback
+console.log(JSON.stringify(request.files) );
+var file = request.files.thumbnail;
+//var ext = str.split(".");
+oldpath = file.path;
+newpath = path.join( __dirname  ,'../xls/'+ "sample_data.xls");
+mv(oldpath, newpath, function(err) {
+  // done. it tried fs.rename first, and then falls back to
+  // piping the source file to the dest file and then unlinking
+  // the source file.
+});
+//response.send(newpath);
+  response.redirect('/home');
+});
 
+var node_xj = require("xlsx-to-json-lc");
+var jsonQuery = require('json-query');
+
+router.get('/xls', function(request, response, next) {
+  // callback
+  var data;
+  
+  node_xj({
+    input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
+    output: null, // output json 
+    lowerCaseHeaders:true
+  }, function(err, result) {
+    if(err) {
+      data = err;
+      console.error(err);
+    } else {
+      data = result;
+      console.log(result);
+    }
+    /**
+     * var data = {
+  people: [
+    {name: 'Matt', country: 'NZ'},
+    {name: 'Pete', country: 'AU'},
+    {name: 'Mikey', country: 'NZ'}
+  ]
+}
+   */  
+//"date":"12/21/17"dat =
+datmin = request.query.min;//request.body.min; 
+datmax = request.query.max;//request.body.max;
+    var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
+      data: data
+    }).value
+
+    response.send(output); 
+  
+  });
+ 
+});
 
 
 module.exports = router;

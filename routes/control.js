@@ -81,7 +81,7 @@ router.get('/view/all', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT * FROM switch ;"
+    text: "SELECT * FROM switch ORDER BY id ASC;"
   }
 pool.query(query, (err, res) => {
  if (err) {
