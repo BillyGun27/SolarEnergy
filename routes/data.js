@@ -17,6 +17,27 @@ router.get('/', function(request, response, next) {
 
 });
 
+var ind = moment().tz("Asia/Jakarta")
+router.post('/insert', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    text: 'INSERT INTO energy (v,i ,receive_date,receive_time,tipe_energy) VALUES ($1,$2,$3,$4,$5) ',
+      values: [ request.body.v, request.body.i  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss') , request.body.type ]//heroku
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+});
+
 
 /* GET home page. */
 router.get('/kwh/:timepart/:detail?', function(request, response, next) {
@@ -77,12 +98,12 @@ router.get('/watt/:tipe?', function(request, response, next) {
 
   if(request.params.tipe == undefined){
     var query = {
-      text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy , v::float*i::float AS watt, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time  FROM energy ORDER BY tipe_energy ,receive_date DESC,receive_time DESC",
+      text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy , v::float*i::float AS watt, v,i to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time  FROM energy ORDER BY tipe_energy ,receive_date DESC,receive_time DESC",
       //values: [request.params.tipe]
     }
   }else{
     var query = {
-      text: "SELECT id,tipe_energy , v::float*i::float AS watt, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = $1 ORDER BY tipe_energy ,receive_date DESC ,receive_time DESC LIMIT 1",     
+      text: "SELECT id,tipe_energy , v::float*i::float AS watt,v,i to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = $1 ORDER BY tipe_energy ,receive_date DESC ,receive_time DESC LIMIT 1",     
       values: [request.params.tipe]
     }
   }
