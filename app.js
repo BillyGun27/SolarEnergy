@@ -22,7 +22,7 @@ client.on('connect', function () {
   client.subscribe('solarenergy/energy/battery')
  
  // client.publish('solarenergy/machine/battery','0')
- client.publish('solarenergy/energy/battery','{"v":5,"i":0.5}')
+// client.publish('solarenergy/energy/battery','{"v":5,"i":0.5}')
 })
  
 
@@ -67,6 +67,14 @@ client.on('message', function (topic, message) {
   // console.log(checkmqtt);
      Sendpgsql(table,content,message,ind,type);
       break;
+    case "solarenergy/energy/load":
+      table = "energy"
+      content = "v,i";
+      type = "load";
+     // checkmqtt = topic +"="+message.toString();
+   // console.log(checkmqtt);
+      Sendpgsql(table,content,message,ind,type);
+       break;
    
  }
   

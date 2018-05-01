@@ -160,8 +160,8 @@ mv(oldpath, newpath, function(err) {
   // piping the source file to the dest file and then unlinking
   // the source file.
 });
-//response.send(newpath);
-  response.redirect('/home');
+response.send(newpath);
+ // response.redirect('/home');
 });
 
 var node_xj = require("xlsx-to-json-lc");
@@ -193,16 +193,58 @@ router.get('/xls', function(request, response, next) {
 }
    */  
 //"date":"12/21/17"dat =
-datmin = request.query.min;//request.body.min; 
-datmax = request.query.max;//request.body.max;
-    var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
-      data: data
-    }).value
+//datmin = request.query.min;//request.body.min; 
+//datmax = request.query.max;//request.body.max;
+   // var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
+   //   data: data
+   // }).value
 
-    response.send(output); 
-  
+   // response.send(output); 
+   response.send(data); 
   });
  
+});
+
+/* Energy Assesment */
+router.get('/lokasi', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    name: "lokasi" ,
+    text: "SELECT * FROM solar_irradiances",
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+});
+
+/* Energy Assessment */
+router.get('/va', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    name: "va" ,
+    text: "SELECT meteran FROM meteran_pln",
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
 });
 
 
