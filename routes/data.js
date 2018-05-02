@@ -260,6 +260,31 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 var pgsqlCaller = function(query) {
   var promise = new Promise(function(resolve, reject){
     var result;
+    pool.query(query[0], (err, res) => {
+      if (err) {
+          result = err.stack;
+        console.log(err.stack)
+      } else {
+           result= res.rows[0];//"" + res.rows[0].batcap ;//.rows[0];
+        //console.log(res)
+     
+      }
+     
+    //  console.log('first method completed');
+      resolve(result);
+    
+        
+      })
+     setTimeout(function() {
+       
+     }, 2000);
+  });
+  return promise;
+};
+
+var pgsqlChain = function(box) {
+  var promise = new Promise(function(resolve, reject){
+    var result;
     pool.query(query, (err, res) => {
       if (err) {
           result = err.stack;
@@ -284,17 +309,28 @@ var pgsqlCaller = function(query) {
 
 router.get('/saving/:id', function(request, response, next) {
   // callback//req.params
-      
-      var query = {
+      var query;
+       query[0] = {
         text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
        values: [request.params.id]
       }
+
+      query[1] = {
+        text: "SELECT  biaya_investasi,  lifetime_sistem_pv,biaya_investasi::float/(24* lifetime_sistem_pv::float  * 365 ) AS Capex FROM user_account WHERE id = $1;",
+       values: [request.params.id]
+      }
+
+      
       pgsqlCaller(query).then((successMessage) => {
         // successMessage is whatever we passed in the resolve(...) function above.
         // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
         console.log(successMessage);
         response.send(successMessage); 
       });
+
+     // pgsqlCaller(query)
+     // .then(pgsqlChain);
+
      
 
 });
