@@ -21,8 +21,8 @@ router.post('/edit', function(request, response, next) {
     // callback//req.params
     var result;
     var query = {
-      text: "UPDATE switch SET nama_switch = $2 WHERE id=$1;",
-      values: [request.body.id,request.body.nama]
+      text: "UPDATE user_account SET lokasi = $2 ,kapasitas_baterai = $3 ,tegangan_baterai = $4 ,kapasitas_solar_panel = $5 ,daya_listrik_rumah = $6 ,lifetime_sistem_pv = $7 ,biaya_investasi=$8 WHERE id=$1;",
+      values: [request.body.id,request.body.lokasi,request.body.kapasitas_baterai,request.body.tegangan_baterai,request.body.kapasitas_solar_panel,request.body.daya_listrik_rumah,request.body.lifetime_sistem_pv,request.body.biaya_investasi]
     }
   pool.query(query, (err, res) => {
    if (err) {
@@ -35,7 +35,7 @@ router.post('/edit', function(request, response, next) {
    response.send(result);   
   })
   
-  });
+});
 
 /* Energy Assesment */
 router.get('/lokasi', function(request, response, next) {

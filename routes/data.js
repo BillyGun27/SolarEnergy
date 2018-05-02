@@ -41,9 +41,9 @@ pool.query(query, (err, res) => {
 
 /* GET home page. */
 router.get('/kwh/:timepart/:detail?', function(request, response, next) {
-  if(request.params.detail == undefined){
+  if(request.params.detail == undefined){//recent data only
     if(request.params.timepart == "current"){
-      output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy GROUP BY day,month,year,receive_date,tipe_energy ORDER BY receive_date DESC LIMIT 2 ";
+      output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy GROUP BY day,month,year,receive_date,tipe_energy ORDER BY receive_date DESC LIMIT 3 ";
     }else if(request.params.timepart == "day"){
       output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ";
     }else if(request.params.timepart == "week"){
@@ -53,9 +53,9 @@ router.get('/kwh/:timepart/:detail?', function(request, response, next) {
     }else if(request.params.timepart == "year"){
       output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year  FROM energy WHERE date_part('year', receive_date::date ) = (SELECT date_part('year', receive_date::date )  AS year FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY month,year,tipe_energy ORDER BY month ASC"
     }
-  }else{
+  }else{//detail = all
     if(request.params.timepart == "current"){
-      output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy GROUP BY day,month,year,receive_date ,tipe_energy ORDER BY receive_date DESC LIMIT 1";
+      output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy GROUP BY day,month,year,receive_date ,tipe_energy ORDER BY receive_date DESC LIMIT 3";
     }else if(request.params.timepart == "day"){
       output = "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ";
     }else if(request.params.timepart == "week"){
@@ -205,7 +205,51 @@ router.get('/xls', function(request, response, next) {
  
 });
 
+/* GET home page. */
+router.get('/battery/capacity', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) )AS current_capacity, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+    values: [request.params.tipe]
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
 
+
+
+});
+
+/* GET home page. */
+router.get('/rekomendasi', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) )AS current_capacity, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+   // values: [request.params.tipe]
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+
+
+});
 
 
 
