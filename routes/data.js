@@ -271,13 +271,11 @@ var pgsqlCaller = function(query) {
       }
      
     //  console.log('first method completed');
-      resolve(result);
+      resolve({query:query,data:result});
     
         
-      })
-     setTimeout(function() {
-       
-     }, 2000);
+      });
+
   });
   return promise;
 };
@@ -285,7 +283,7 @@ var pgsqlCaller = function(query) {
 var pgsqlChain = function(box) {
   var promise = new Promise(function(resolve, reject){
     var result;
-    pool.query(query, (err, res) => {
+    pool.query(box.query[1], (err, res) => {
       if (err) {
           result = err.stack;
         console.log(err.stack)
@@ -296,13 +294,11 @@ var pgsqlChain = function(box) {
       }
      
     //  console.log('first method completed');
-      resolve(result);
+      resolve({a:box.data,b:result});
     
         
       })
-     setTimeout(function() {
-       
-     }, 2000);
+     
   });
   return promise;
 };
@@ -320,16 +316,22 @@ router.get('/saving/:id', function(request, response, next) {
        values: [request.params.id]
       }
 
-      
+      /*
       pgsqlCaller(query).then((successMessage) => {
         // successMessage is whatever we passed in the resolve(...) function above.
         // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
         console.log(successMessage);
         response.send(successMessage); 
-      });
+      });*/
 
-     // pgsqlCaller(query)
-     // .then(pgsqlChain);
+      pgsqlCaller(query)
+      .then(pgsqlChain)
+      .then((successMessage) => {
+        // successMessage is whatever we passed in the resolve(...) function above.
+        // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+        console.log(successMessage);
+        response.send(successMessage); 
+      });
 
      
 
