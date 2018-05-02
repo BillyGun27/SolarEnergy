@@ -241,7 +241,7 @@ pool.query(query, (err, res) => {
      result = err.stack;
    console.log(err.stack)
  } else {
-     result=res.rows[0].batcap;//.rows[0];
+     result= "" + res.rows[0].batcap ;//.rows[0];
    console.log(res)
  }
  response.send(result);   
