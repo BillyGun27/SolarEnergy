@@ -241,8 +241,15 @@ pool.query(query, (err, res) => {
      result = err.stack;
    console.log(err.stack)
  } else {
-     result= "" + res.rows[0].batcap ;//.rows[0];
-   console.log(res)
+    // result= "" + res.rows[0].batcap ;//.rows[0];
+   //console.log(res)
+   var capacity =  res.rows[0].batcap;
+    if(capacity > 20){
+      result="kombinasi";
+    }else if(capacity < 20){
+      result="pln";
+    }
+
  }
  response.send(result);   
 })
