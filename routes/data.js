@@ -102,7 +102,7 @@ router.get('/watt/:tipe?', function(request, response, next) {
       //values: [request.params.tipe]
     }
   }else{
-    var query = {
+    var query = {//pln, battery , load
       text: "SELECT id,tipe_energy , v::float*i::float AS watt,v,i, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = $1 ORDER BY tipe_energy ,receive_date DESC ,receive_time DESC LIMIT 1",     
       values: [request.params.tipe]
     }
@@ -206,18 +206,19 @@ router.get('/xls', function(request, response, next) {
 });
 
 /* GET home page. */
-router.get('/batcap', function(request, response, next) {
+router.get('/batcap/:id', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
-    values: [request.params.tipe]
+    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+    values: [request.params.id]
   }
 pool.query(query, (err, res) => {
  if (err) {
      result = err.stack;
    console.log(err.stack)
  } else {
+
      result=res.rows;//.rows[0];
    console.log(res)
  }
@@ -229,32 +230,72 @@ pool.query(query, (err, res) => {
 });
 
 /* GET home page. */
-router.get('/rekomendasi', function(request, response, next) {
+router.get('/rekomendasi/:id', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
-   // values: [request.params.tipe]
+    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+    values: [request.params.id]
   }
-pool.query(query, (err, res) => {
- if (err) {
-     result = err.stack;
-   console.log(err.stack)
- } else {
-    // result= "" + res.rows[0].batcap ;//.rows[0];
-   //console.log(res)
-   var capacity =  res.rows[0].batcap;
-    if(capacity > 20){
-      result="kombinasi";
-    }else if(capacity < 20){
-      result="pln";
+    pool.query(query, (err, res) => {
+    if (err) {
+        result = err.stack;
+      console.log(err.stack)
+    } else {
+        // result= "" + res.rows[0].batcap ;//.rows[0];
+      //console.log(res)
+      var capacity =  res.rows[0].batcap;
+        if(capacity > 20){
+          result="kombinasi";
+        }else if(capacity < 20){
+          result="pln";
+        }
+
     }
+    response.send(result);   
+    })
 
- }
- response.send(result);   
-})
+});
 
+var pgsqlCaller = function(query) {
+  var promise = new Promise(function(resolve, reject){
+    var result;
+    pool.query(query, (err, res) => {
+      if (err) {
+          result = err.stack;
+        console.log(err.stack)
+      } else {
+           result= res.rows[0];//"" + res.rows[0].batcap ;//.rows[0];
+        //console.log(res)
+     
+      }
+     
+    //  console.log('first method completed');
+      resolve(result);
+    
+        
+      })
+     setTimeout(function() {
+       
+     }, 2000);
+  });
+  return promise;
+};
 
+router.get('/saving/:id', function(request, response, next) {
+  // callback//req.params
+      
+      var query = {
+        text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+       values: [request.params.id]
+      }
+      pgsqlCaller().then((successMessage) => {
+        // successMessage is whatever we passed in the resolve(...) function above.
+        // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+        console.log(successMessage);
+        response.send(successMessage); 
+      });
+     
 
 });
 
