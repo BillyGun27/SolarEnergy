@@ -289,7 +289,7 @@ router.get('/saving/:id', function(request, response, next) {
         text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
        values: [request.params.id]
       }
-      pgsqlCaller().then((successMessage) => {
+      pgsqlCaller(query).then((successMessage) => {
         // successMessage is whatever we passed in the resolve(...) function above.
         // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
         console.log(successMessage);
