@@ -360,7 +360,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
        **/
       //console.log(successMessage);.batcap[0].batcap
-      response.send(box); 
+      response.send(box.batcap); 
     });
 
 });
