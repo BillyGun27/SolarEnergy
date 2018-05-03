@@ -303,6 +303,40 @@ var pgsqlChain = function(box) {
   return promise;
 };
 
+var Cxls = function(box) {
+  var promise = new Promise(function(resolve, reject){
+    var result;
+
+        node_xj({
+          input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
+          output: null, // output json 
+          lowerCaseHeaders:true
+        }, function(err, result) {
+          if(err) {
+            //data = err;
+            console.error(err);
+          } else {
+            //data = result;
+            console.log(result);
+          }
+            //"date":"12/21/17"dat =
+      //datmin = request.query.min;//request.body.min; 
+      //datmax = request.query.max;//request.body.max;
+        // var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
+        //   data: data
+        // }).value
+      
+        // response.send(output); 
+        // response.send(data); 
+        resolve({a:box.data,b:result});  
+         
+      });
+   
+      
+  });
+  return promise;
+};
+
 router.get('/saving/:id', function(request, response, next) {
   // callback//req.params
       var query=[];
@@ -337,6 +371,13 @@ router.get('/saving/:id', function(request, response, next) {
 
 });
 
+//var ind = moment().tz("Asia/Jakarta")
+router.post('/checkdate', function(request, response, next) {
+
+
+response.send({year:ind.format('YYYY'),month:ind.format('M'),date:ind.format('D'),hour:ind.format('H')});   
+
+});
 
 
 module.exports = router;
