@@ -265,13 +265,14 @@ var pgsqlCaller = function(query) {
           result = err.stack;
         console.log(err.stack)
       } else {
-           result= res.rows[0];//"" + res.rows[0].batcap ;//.rows[0];
+           result= res.rows[0].watt;//"" + res.rows[0].batcap ;//.rows[0];
         //console.log(res)
+
      
       }
      
     //  console.log('first method completed');
-      resolve({query:query,data:result});
+      resolve({query:query,p:result});
     
         
       });
@@ -313,22 +314,23 @@ var Cxls = function() {
           lowerCaseHeaders:true
         }, function(err, result) {
           if(err) {
-            //data = err;
+            data = err;
             console.error(err);
           } else {
-            //data = result;
+            data = result;
             console.log(result);
           }
             //"date":"12/21/17"dat =
       //datmin = request.query.min;//request.body.min; 
       //datmax = request.query.max;//request.body.max;
-         var output= jsonQuery('[* Jam= 1 ]', {
+         var output= jsonQuery('[* jam='+ind.format('H')+' & tanggal='+ind.format('D')+' ]', {
            data: data
          }).value
       
-         response.send(output); 
+   //      response.send(output); 
         // response.send(data); 
-        resolve("sasa");  
+        c = {pln:output[0]['c pv'],pv:output[0]['c pv']}
+        resolve({c:c});  
          
       });
    
@@ -341,7 +343,7 @@ router.get('/saving/:id', function(request, response, next) {
   // callback//req.params
       var query=[];
        query[0] = {
-        text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+        text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy , v::float*i::float AS watt, v,i, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time  FROM energy ORDER BY tipe_energy ,receive_date DESC,receive_time DESC",
        values: [request.params.id]
       }
 
