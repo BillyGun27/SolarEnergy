@@ -315,7 +315,7 @@ var pgsqlChain = function(box) {
   return promise;
 };
 
-var Cxls = function() {
+var Cxls = function(box) {
   var promise = new Promise(function(resolve, reject){
     var data;
 
@@ -341,7 +341,8 @@ var Cxls = function() {
    //      response.send(output); 
         // response.send(data); 
         c = {pln:output[0]['c pln'],pv:output[0]['c pv']}
-        resolve({c:c});  
+        
+        resolve({p:box.p,capex:box.capex,c:c});  
          
       });
    
@@ -372,6 +373,7 @@ router.get('/saving/:id', function(request, response, next) {
 
       pgsqlCaller(query)
       .then(pgsqlChain)
+      .then(Cxls)
       .then((successMessage) => {
         // successMessage is whatever we passed in the resolve(...) function above.
         // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
@@ -384,6 +386,7 @@ router.get('/saving/:id', function(request, response, next) {
 });
 
 //var ind = moment().tz("Asia/Jakarta")
+/*
 router.get('/checkdate', function(request, response, next) {
 
 
@@ -396,7 +399,7 @@ router.get('/checkdate', function(request, response, next) {
       response.send(successMessage); 
     });
 
-});
+});*/
 
 
 module.exports = router;
