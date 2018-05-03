@@ -342,7 +342,7 @@ var Cxls = function(box) {
         // response.send(data); 
         c = {pln:output[0]['c pln'],pv:output[0]['c pv']}
         
-        resolve({p:box.p,capex:box.capex,c:c});  
+        resolve({p:box.p,c:c,capex:box.capex});  
          
       });
    
