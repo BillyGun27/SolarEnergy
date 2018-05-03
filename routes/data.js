@@ -294,7 +294,7 @@ var pgsqlChain = function(box) {
       }
      
     //  console.log('first method completed');
-      resolve({a:box.data,b:result});
+      resolve({p:box.data,cpx:result});
     
         
       })
