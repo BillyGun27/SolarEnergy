@@ -328,7 +328,7 @@ var Cxls = function() {
       
          response.send(output); 
         // response.send(data); 
-        resolve(output);  
+        resolve("sasa");  
          
       });
    
