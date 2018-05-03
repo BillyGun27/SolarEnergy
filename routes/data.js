@@ -344,7 +344,6 @@ router.get('/saving/:id', function(request, response, next) {
       var query=[];
        query[0] = {
         text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy , v::float*i::float AS watt, v,i, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time  FROM energy ORDER BY tipe_energy ,receive_date DESC,receive_time DESC",
-       values: [request.params.id]
       }
 
       query[1] = {
