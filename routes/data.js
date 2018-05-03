@@ -359,8 +359,8 @@ router.get('/rekomendasi/:id', function(request, response, next) {
         }
 
        **/
-      //console.log(successMessage);
-      response.send(box.batcap[0].batcap); 
+      //console.log(successMessage);.batcap[0].batcap
+      response.send(box); 
     });
 
 });
