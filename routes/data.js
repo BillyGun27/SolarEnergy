@@ -303,9 +303,9 @@ var pgsqlChain = function(box) {
   return promise;
 };
 
-var Cxls = function(box) {
+var Cxls = function() {
   var promise = new Promise(function(resolve, reject){
-    var result;
+    var data;
 
         node_xj({
           input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
@@ -322,13 +322,13 @@ var Cxls = function(box) {
             //"date":"12/21/17"dat =
       //datmin = request.query.min;//request.body.min; 
       //datmax = request.query.max;//request.body.max;
-        // var output= jsonQuery('[* date>='+datmin+' & date<='+datmax+']', {
-        //   data: data
-        // }).value
+         var output= jsonQuery('[* Jam= 1 ]', {
+           data: data
+         }).value
       
-        // response.send(output); 
+         response.send(output); 
         // response.send(data); 
-        resolve({p:box.data,cpx:result});  
+        resolve(output);  
          
       });
    
@@ -375,7 +375,14 @@ router.get('/saving/:id', function(request, response, next) {
 router.get('/checkdate', function(request, response, next) {
 
 
-response.send({year:ind.format('YYYY'),month:ind.format('M'),date:ind.format('D'),hour:ind.format('H')});   
+//response.send({year:ind.format('YYYY'),month:ind.format('M'),date:ind.format('D'),hour:ind.format('H')});   
+    Cxls()
+    .then((successMessage) => {
+      // successMessage is whatever we passed in the resolve(...) function above.
+      // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+      console.log(successMessage);
+      response.send(successMessage); 
+    });
 
 });
 
