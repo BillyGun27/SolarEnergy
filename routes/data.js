@@ -229,39 +229,144 @@ pool.query(query, (err, res) => {
 
 });
 
-/** P load
+
+var recomCaller = function(query) {
+  var promise = new Promise(function(resolve, reject){
+    var result;
+    pool.query(query[0], (err, res) => {
+      if (err) {
+          result = err.stack;
+        console.log(err.stack)
+      } else {
+
+        /*
+            for (var i = 0; i < 3; i++) {
+                if(res.rows[i].tipe_energy == 'battery'){
+                  pv = res.rows[i].watt;
+                }else if(res.rows[i].tipe_energy == 'pln'){
+                  pln = res.rows[i].watt;
+                }
+
+              }
+           
+           result = {pv:pv,pln:pln}*/
+           //"" + res.rows[0].batcap ;//.rows[0];
+        //console.log(res)
+              result = res.rows;
+     
+      }
+     
+    //  console.log('first method completed');
+      resolve({query:query,batcap:result});
+    
+        
+      });
+
+  });
+  return promise;
+};
+
+var recomChain = function(box) {
+  var promise = new Promise(function(resolve, reject){
+    var result;
+    pool.query(box.query[1], (err, res) => {
+      if (err) {
+          result = err.stack;
+        console.log(err.stack)
+      } else {
+           result= res.rows;//"" + res.rows[0].batcap ;//.rows[0];
+        //console.log(res)
+      //  result = res.rows[0].capex
+      }
+     
+    //  console.log('first method completed');
+      resolve({batcap:box.batcap ,pload:result});
+    
+        
+      })
+     
+  });
+  return promise;
+};
+
+var Rxls = function(box) {
+  var promise = new Promise(function(resolve, reject){
+    var data;
+
+        node_xj({
+          input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
+          output: null, // output json 
+          lowerCaseHeaders:true
+        }, function(err, result) {
+          if(err) {
+            data = err;
+            console.error(err);
+          } else {
+            data = result;
+            console.log(result);
+          }
+            //"date":"12/21/17"dat =
+      //datmin = request.query.min;//request.body.min; 
+      //datmax = request.query.max;//request.body.max;
+         var output= jsonQuery('[*  tanggal='+ind.format('D')+' ]', {
+           data: data
+         }).value
+      
+   //      response.send(output); 
+        // response.send(data); 
+      //  c = {pln:output[0]['c pln'],pv:output[0]['c pv']}
+        
+        resolve({batcap:box.batcap,c:output,pload:box.pload});  
+         
+      });
+   
+      
+  });
+  return promise;
+};
+
+/** P load every hour
  * SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year 
 FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC 
  * **/
 /* GET home page. */
 router.get('/rekomendasi/:id', function(request, response, next) {
   // callback//req.params
-  var result;
-  var query = {
+  var query=[];
+  query[0] = {
     text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
     values: [request.params.id]
   }
-    pool.query(query, (err, res) => {
-    if (err) {
-        result = err.stack;
-      console.log(err.stack)
-    } else {
-        // result= "" + res.rows[0].batcap ;//.rows[0];
-      //console.log(res)
-      var capacity =  res.rows[0].batcap;
+
+ query[1] = {
+   text: " SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
+  values: [request.params.id]
+ }
+
+    savingCaller(query)
+    .then(savingChain)
+    .then(Rxls)
+    .then((successMessage) => {
+      // successMessage is whatever we passed in the resolve(...) function above.
+      // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+
+      /**
+        
+           var capacity =  res.rows[0].batcap;
         if(capacity > 20){
           result="kombinasi";
         }else if(capacity < 20){
           result="pln";
         }
 
-    }
-    response.send(result);   
-    })
+       **/
+      console.log(successMessage);
+      response.send(successMessage); 
+    });
 
 });
 
-var pgsqlCaller = function(query) {
+var savingCaller = function(query) {
   var promise = new Promise(function(resolve, reject){
     var result;
     pool.query(query[0], (err, res) => {
@@ -296,7 +401,7 @@ var pgsqlCaller = function(query) {
   return promise;
 };
 
-var pgsqlChain = function(box) {
+var savingChain = function(box) {
   var promise = new Promise(function(resolve, reject){
     var result;
     pool.query(box.query[1], (err, res) => {
@@ -354,6 +459,7 @@ var Cxls = function(box) {
   });
   return promise;
 };
+
 //SELECT DISTINCT ON(tipe_energy) id,tipe_energy , v::float*i::float AS watt, v,i, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time  FROM energy ORDER BY tipe_energy ,receive_date DESC,receive_time DESC
 router.get('/saving/:id', function(request, response, next) {
   // callback//req.params
@@ -375,8 +481,8 @@ router.get('/saving/:id', function(request, response, next) {
         response.send(successMessage); 
       });*/
 
-      pgsqlCaller(query)
-      .then(pgsqlChain)
+      savingCaller(query)
+      .then(savingChain)
       .then(Cxls)
       .then((successMessage) => {
         // successMessage is whatever we passed in the resolve(...) function above.
