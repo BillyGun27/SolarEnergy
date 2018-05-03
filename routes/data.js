@@ -265,7 +265,7 @@ var pgsqlCaller = function(query) {
           result = err.stack;
         console.log(err.stack)
       } else {
-           result= res.rows[0];//"" + res.rows[0].batcap ;//.rows[0];
+           result= res.rows[0].watt;//"" + res.rows[0].batcap ;//.rows[0];
         //console.log(res)
 
      
@@ -289,7 +289,7 @@ var pgsqlChain = function(box) {
           result = err.stack;
         console.log(err.stack)
       } else {
-           result= res.rows[0].watt;//"" + res.rows[0].batcap ;//.rows[0];
+           result= res.rows[0];//"" + res.rows[0].batcap ;//.rows[0];
         //console.log(res)
      
       }
