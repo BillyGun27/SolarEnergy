@@ -265,7 +265,18 @@ var pgsqlCaller = function(query) {
           result = err.stack;
         console.log(err.stack)
       } else {
-           result= res.rows[0].watt;//"" + res.rows[0].batcap ;//.rows[0];
+
+            for (var i = 0; i < 3; i++) {
+                if(res.rows[i].tipe_energy == 'battery'){
+                  pv = {tipe_energy: res.rows[i].tipe_energy ,watt: res.rows[i].watt };
+                }else if(res.rows[i].tipe_energy == 'pln'){
+                  pln =  {tipe_energy: res.rows[i].tipe_energy ,watt: res.rows[i].watt };
+                }
+
+              }
+           
+           result = {pv:pv,pln:pln}
+           //"" + res.rows[0].batcap ;//.rows[0];
         //console.log(res)
 
      
