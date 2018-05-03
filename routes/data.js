@@ -372,7 +372,7 @@ router.get('/saving/:id', function(request, response, next) {
 });
 
 //var ind = moment().tz("Asia/Jakarta")
-router.post('/checkdate', function(request, response, next) {
+router.get('/checkdate', function(request, response, next) {
 
 
 response.send({year:ind.format('YYYY'),month:ind.format('M'),date:ind.format('D'),hour:ind.format('H')});   
