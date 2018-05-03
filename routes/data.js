@@ -300,13 +300,13 @@ var pgsqlChain = function(box) {
           result = err.stack;
         console.log(err.stack)
       } else {
-           result= res.rows[0];//"" + res.rows[0].batcap ;//.rows[0];
+           //result= res.rows[0];//"" + res.rows[0].batcap ;//.rows[0];
         //console.log(res)
-     
+        result = res.rows[0].capex
       }
      
     //  console.log('first method completed');
-      resolve({p:box.p,cpx:result});
+      resolve({p:box.p,capex:result});
     
         
       })
