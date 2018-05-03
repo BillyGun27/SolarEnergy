@@ -340,7 +340,7 @@ var Cxls = function() {
       
    //      response.send(output); 
         // response.send(data); 
-        c = {pln:output[0]['c pv'],pv:output[0]['c pv']}
+        c = {pln:output[0]['c pln'],pv:output[0]['c pv']}
         resolve({c:c});  
          
       });
