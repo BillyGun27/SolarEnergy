@@ -345,7 +345,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
     recomCaller(query)
     .then(recomChain)
     .then(Rxls)
-    .then((successMessage) => {
+    .then((box) => {
       // successMessage is whatever we passed in the resolve(...) function above.
       // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
 
@@ -359,8 +359,8 @@ router.get('/rekomendasi/:id', function(request, response, next) {
         }
 
        **/
-      console.log(successMessage);
-      response.send(successMessage); 
+      //console.log(successMessage);
+      response.send(box.batcap[0].batcap); 
     });
 
 });
@@ -486,6 +486,7 @@ router.get('/saving/:id', function(request, response, next) {
       .then((successMessage) => {
         // successMessage is whatever we passed in the resolve(...) function above.
         // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+        //rumus
         console.log(successMessage);
         response.send(successMessage); 
       });
