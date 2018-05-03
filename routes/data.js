@@ -328,7 +328,7 @@ var Cxls = function(box) {
       
         // response.send(output); 
         // response.send(data); 
-        resolve({a:box.data,b:result});  
+        resolve({p:box.data,cpx:result});  
          
       });
    
