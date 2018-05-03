@@ -268,9 +268,9 @@ var pgsqlCaller = function(query) {
 
             for (var i = 0; i < 3; i++) {
                 if(res.rows[i].tipe_energy == 'battery'){
-                  pv = {tipe_energy: res.rows[i].tipe_energy ,watt: res.rows[i].watt };
+                  pv = res.rows[i].watt;
                 }else if(res.rows[i].tipe_energy == 'pln'){
-                  pln =  {tipe_energy: res.rows[i].tipe_energy ,watt: res.rows[i].watt };
+                  pln = res.rows[i].watt;
                 }
 
               }
