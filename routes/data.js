@@ -343,8 +343,8 @@ router.get('/rekomendasi/:id', function(request, response, next) {
   values: [request.params.id]
  }
 
-    savingCaller(query)
-  //  .then(savingChain)
+    recomCaller(query)
+  //  .then(recomChain)
    // .then(Rxls)
     .then((successMessage) => {
       // successMessage is whatever we passed in the resolve(...) function above.
