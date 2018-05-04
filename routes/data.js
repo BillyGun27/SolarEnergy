@@ -364,7 +364,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
         batcap = box.batcap[0].batcap;
 
         //action
-
+        fval={};
         if(parseFloat(cg) == parseFloat(cpv) ){
           ccom ="equal";
           if(batcap<20){
