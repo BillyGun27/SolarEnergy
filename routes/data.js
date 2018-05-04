@@ -346,6 +346,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
     .then(recomChain)
     .then(Rxls)
     .then((box) => {
+      batcap = box.batcap[0].batcap
       // successMessage is whatever we passed in the resolve(...) function above.
       // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
 
@@ -360,7 +361,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
        **/
       //console.log(successMessage);.batcap[0].batcap
-      response.send(""+box.batcap[0].batcap); 
+      response.send(box); 
     });
 
 });
