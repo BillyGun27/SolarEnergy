@@ -354,7 +354,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
       for(var i=0; i<24 ; i++){
         cpv = box.c[i]["c pv"];
-        cpln = box.c[i]["c pln"];
+        cg = box.c[i]["c pln"];
         if(i < box.pload.length){
           pload = box.pload[i].watt;
         }else{
@@ -363,12 +363,24 @@ router.get('/rekomendasi/:id', function(request, response, next) {
        
         batcap = box.batcap[0].batcap;
 
+        //action
+
+        if(cg == cpv){
+          ccom ="equal";
+        }else if(cg > cpv){
+          ccom = "cg";
+        }else {
+          ccom = "cpv";
+        }
+
         data = {
           jam:i+1,
           cpv:cpv,
-          cpln:cpln,
+          cg:cg,
           pload:pload,
-          batcap:batcap}
+          batcap:batcap,
+          ccom:ccom
+        }
 
         action.push(data);
       }
