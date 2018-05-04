@@ -350,6 +350,12 @@ router.get('/rekomendasi/:id', function(request, response, next) {
       // successMessage is whatever we passed in the resolve(...) function above.
       // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
 
+      action = [];
+
+      for(var i=0; i<24 ; i++){
+        data = {jam:i+1}
+        action.push(data);
+      }
       /**
         
            var capacity =  res.rows[0].batcap;
@@ -361,7 +367,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
        **/
       //console.log(successMessage);.batcap[0].batcap
-      response.send(box); 
+      response.send(action); 
     });
 
 });
