@@ -416,6 +416,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
             //ftot = pload * parseFloat(cpv);
 
            // fval={ftot:ftot};
+           recomendation="pv";
           }
         }else {
           chigh = "cpv";
