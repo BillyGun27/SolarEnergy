@@ -367,10 +367,56 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
         if(parseFloat(cg) == parseFloat(cpv) ){
           ccom ="equal";
+          if(batcap<20){
+            ftot = pload * parseFloat(cg);
+
+            fval={ftot:ftot};
+          }else if(20<batcap && batcap<50){
+            ftot=( ( (0.4)*pload*parseFloat(cg) )+ ( (0.6)*pload*parseFloat(cpv) ) );
+            fg=( (0.4)*pload*parseFloat(cg) );
+            fpv=( (0.6)*pload*parseFloat(cpv) );
+
+            fval={ftot:ftot,fg:fg,fpv:fpv};
+          }else if(batcap>50){
+            ftot = pload * parseFloat(cpv);
+
+            fval={ftot:ftot};
+          }
         }else if(parseFloat(cg) > parseFloat(cpv)){
           ccom = "cg";
+          if(batcap<20){
+            ftot = pload * parseFloat(cg);
+
+            fval={ftot:ftot};
+          }else if(20<batcap && batcap<50){
+            ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
+            fg=( (0.5)*pload*parseFloat(cg) );
+            fpv=( (0.5)*pload*parseFloat(cpv) );
+
+            fval={ftot:ftot,fg:fg,fpv:fpv};
+          }else if(batcap>50){
+            ftot = pload * parseFloat(cpv);
+
+            fval={ftot:ftot};
+          }
         }else {
           ccom = "cpv";
+          if(batcap<20){
+            ftot = pload * parseFloat(cg);
+
+            fval={ftot:ftot};
+          }else if(20<batcap && batcap<50){
+            ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
+            fg=( (0.5)*pload*parseFloat(cg) );
+            fpv=( (0.5)*pload*parseFloat(cpv) );
+
+            fval={ftot:ftot,fg:fg,fpv:fpv};
+          }else if(batcap>50){
+            ftot = pload * parseFloat(cpv);
+
+            fval={ftot:ftot};
+          }
+          
         }
 
         data = {
@@ -379,7 +425,8 @@ router.get('/rekomendasi/:id', function(request, response, next) {
           cg:cg,
           pload:pload,
           batcap:batcap,
-          ccom:ccom
+          ccom:ccom,
+          fval:fval
         }
 
         action.push(data);
