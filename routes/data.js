@@ -594,12 +594,17 @@ router.get('/saving/:id', function(request, response, next) {
       savingCaller(query)
       .then(savingChain)
       .then(Cxls)
-      .then((successMessage) => {
+      .then((box) => {
         // successMessage is whatever we passed in the resolve(...) function above.
         // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
         //rumus
-        console.log(successMessage);
-        response.send(successMessage); 
+
+        fpln = box.p.pln * box.c.pln;
+        fpv = box.p.pv * box.c.pv;
+        fsaving = box.p.load *  box.c.pv + box.capex;
+
+        //console.log(box);
+        response.send({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box}); 
       });
 
      
