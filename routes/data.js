@@ -379,11 +379,13 @@ var savingCaller = function(query) {
                   pv = res.rows[i].watt;
                 }else if(res.rows[i].tipe_energy == 'pln'){
                   pln = res.rows[i].watt;
+                }else if(res.rows[i].tipe_energy == 'load'){
+                  load = res.rows[i].watt;
                 }
 
               }
            
-           result = {pv:pv,pln:pln}
+           result = {pv:pv,pln:pln,load:load}
            //"" + res.rows[0].batcap ;//.rows[0];
         //console.log(res)
 
