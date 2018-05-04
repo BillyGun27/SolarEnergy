@@ -364,7 +364,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
         batcap = box.batcap[0].batcap;
 
         //action
-
+/*
         if(parseFloat(cg) == parseFloat(cpv) ){
           ccom ="equal";
           if(batcap<20){
@@ -443,7 +443,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
             recomendation="pv";
           }
 
-        }
+        }*/
 
         data = {
           jam:i+1,
@@ -452,8 +452,8 @@ router.get('/rekomendasi/:id', function(request, response, next) {
           pload:pload,
           batcap:batcap,
           ccom:ccom,
-          fval:fval,
-          recomendation:recomendation
+         // fval:fval,
+         // recomendation:recomendation
         }
 
         action.push(data);
