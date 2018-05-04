@@ -365,7 +365,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
         batcap = box.batcap[0].batcap;
 
         //action
-
+        recomendation="";
         if(parseFloat(cg) == parseFloat(cpv) ){
           chigh ="equal";
           if(batcap<20){
