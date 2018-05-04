@@ -371,16 +371,25 @@ router.get('/rekomendasi/:id', function(request, response, next) {
             ftot = pload * parseFloat(cg);
 
             fval={ftot:ftot};
+            recomendation="grid";
           }else if(20<batcap && batcap<50){
             ftot=( ( (0.4)*pload*parseFloat(cg) )+ ( (0.6)*pload*parseFloat(cpv) ) );
             fg=( (0.4)*pload*parseFloat(cg) );
             fpv=( (0.6)*pload*parseFloat(cpv) );
 
             fval={ftot:ftot,fg:fg,fpv:fpv};
+            if(Math.min(ftot, fg,fpv) == ftot ){
+              recomendation="kombinasi";
+            }else if(Math.min(ftot, fg,fpv) == fg ){
+              recomendation="grid";
+            }else if(Math.min(ftot, fg,fpv) == fpv ){
+              recomendation="pv";
+            }
           }else if(batcap>50){
             ftot = pload * parseFloat(cpv);
 
             fval={ftot:ftot};
+            recomendation="pv";
           }
         }else if(parseFloat(cg) > parseFloat(cpv)){
           ccom = "cg";
@@ -388,12 +397,20 @@ router.get('/rekomendasi/:id', function(request, response, next) {
             ftot = pload * parseFloat(cg);
 
             fval={ftot:ftot};
+            recomendation="grid";
           }else if(20<batcap && batcap<50){
             ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
             fg=( (0.5)*pload*parseFloat(cg) );
             fpv=( (0.5)*pload*parseFloat(cpv) );
 
             fval={ftot:ftot,fg:fg,fpv:fpv};
+            if(Math.min(ftot, fg,fpv) == ftot ){
+              recomendation="kombinasi";
+            }else if(Math.min(ftot, fg,fpv) == fg ){
+              recomendation="grid";
+            }else if(Math.min(ftot, fg,fpv) == fpv ){
+              recomendation="pv";
+            }
           }else if(batcap>50){
             ftot = pload * parseFloat(cpv);
 
@@ -405,18 +422,27 @@ router.get('/rekomendasi/:id', function(request, response, next) {
             ftot = pload * parseFloat(cg);
 
             fval={ftot:ftot};
+            recomendation="grid";
           }else if(20<batcap && batcap<50){
             ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
             fg=( (0.5)*pload*parseFloat(cg) );
             fpv=( (0.5)*pload*parseFloat(cpv) );
 
             fval={ftot:ftot,fg:fg,fpv:fpv};
+            if(Math.min(ftot, fg,fpv) == ftot ){
+              recomendation="kombinasi";
+            }else if(Math.min(ftot, fg,fpv) == fg ){
+              recomendation="grid";
+            }else if(Math.min(ftot, fg,fpv) == fpv ){
+              recomendation="pv";
+            }
           }else if(batcap>50){
             ftot = pload * parseFloat(cpv);
 
             fval={ftot:ftot};
+            recomendation="pv";
           }
-          
+
         }
 
         data = {
@@ -426,7 +452,8 @@ router.get('/rekomendasi/:id', function(request, response, next) {
           pload:pload,
           batcap:batcap,
           ccom:ccom,
-          fval:fval
+          fval:fval,
+          recomendation:recomendation
         }
 
         action.push(data);
