@@ -355,15 +355,16 @@ router.get('/rekomendasi/:id', function(request, response, next) {
       for(var i=0; i<24 ; i++){
         cpv = box.c[i]["c pv"];
         cpln = box.c[i]["c pln"];
-        pload = box.pload[i].watt;
+        pload = box.pload[1].watt;
         batcap = box.batcap[0].batcap;
 
-        data = {jam:i+1,
+        data = {
+          jam:i+1,
           cpv:cpv,
           cpln:cpln,
           pload:pload,
           batcap:batcap}
-          
+
         action.push(data);
       }
       /**
