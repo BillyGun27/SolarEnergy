@@ -333,13 +333,13 @@ FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date 
 router.get('/rekomendasi/:id', function(request, response, next) {
   // callback//req.params
   var query=[];
-  query[0] = {
+  query[0] = {//battery capacity
     text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
     values: [request.params.id]
   }
 
- query[1] = {
-   text: " SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
+ query[1] = {//pload
+   text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
  }
 
     recomCaller(query)
@@ -401,7 +401,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
           }else if(20<batcap && batcap<50){
             ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
             fg=( (0.5)*pload*parseFloat(cg) );
-            fpv=( (0.5)*pload*parseFloat(cpv) );
+            fpv= 0.53//( (0.5)*pload*parseFloat(cpv) );
 
             fval={ftot:ftot,fg:fg,fpv:fpv};
             if(Math.min(ftot, fg,fpv) == ftot ){
