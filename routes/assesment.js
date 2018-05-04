@@ -29,7 +29,7 @@ pool.query(query, (err, res) => {
      result = err.stack;
    console.log(err.stack)
  } else {
-     result="success";//res.rows;//.rows[0];
+     result= res.rows;
    console.log(res)
  }
  response.send(result);   
