@@ -352,7 +352,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
       action = [];
 
-    //  for(var i=0; i<24 ; i++){
+      for(var i=0; i<24 ; i++){
       i=0;
         cpv = box.c[i]["c pv"];
         cg = box.c[i]["c pln"];
@@ -460,7 +460,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
         }
 
         action.push(data);
-     // }
+      }
       /**
         
            var capacity =  res.rows[0].batcap;
