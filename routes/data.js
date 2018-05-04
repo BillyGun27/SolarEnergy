@@ -364,7 +364,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
         batcap = box.batcap[0].batcap;
 
         //action
-        fval={};
+
         if(parseFloat(cg) == parseFloat(cpv) ){
           ccom ="equal";
           if(batcap<20){
@@ -401,7 +401,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
           }else if(20<batcap && batcap<50){
             ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
             fg=( (0.5)*pload*parseFloat(cg) );
-            fpv= ( (0.5)*pload*parseFloat(cpv) );
+            fpv=( (0.5)*pload*parseFloat(cpv) );
 
             fval={ftot:ftot,fg:fg,fpv:fpv};
             if(Math.min(ftot, fg,fpv) == ftot ){
@@ -411,7 +411,6 @@ router.get('/rekomendasi/:id', function(request, response, next) {
             }else if(Math.min(ftot, fg,fpv) == fpv ){
               recomendation="pv";
             }
-
           }else if(batcap>50){
             ftot = pload * parseFloat(cpv);
 
