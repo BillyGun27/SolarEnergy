@@ -17,6 +17,27 @@ router.get('/', function(request, response, next) {
 
 });
 
+router.get('/view/:id', function(request, response, next) {
+  // callback//req.params//request.params.id
+  var result;
+  var query = {
+    text: "SELECT  id,lokasi, kapasitas_baterai, tegangan_baterai, kapasitas_solar_panel, daya_listrik_rumah, lifetime_sistem_pv, biaya_investasi FROM user_account WHERE id=$1;",
+    values: [request.params.id]
+  }
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result="success";//res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+});
+
+
 router.post('/edit', function(request, response, next) {
     // callback//req.params
     var result;
