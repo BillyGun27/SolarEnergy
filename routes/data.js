@@ -300,10 +300,10 @@ var Rxls = function(box) {
         }, function(err, result) {
           if(err) {
             data = err;
-            console.error(err);
+            //console.error(err);
           } else {
             data = result;
-            console.log(result);
+           // console.log(result);
           }
             //"date":"12/21/17"dat =
       //datmin = request.query.min;//request.body.min; 
@@ -352,7 +352,8 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
       action = [];
 
-      for(var i=0; i<24 ; i++){
+    //  for(var i=0; i<24 ; i++){
+      i=0;
         cpv = box.c[i]["c pv"];
         cg = box.c[i]["c pln"];
         if(i < box.pload.length){
@@ -457,7 +458,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
         }
 
         action.push(data);
-      }
+     // }
       /**
         
            var capacity =  res.rows[0].batcap;
