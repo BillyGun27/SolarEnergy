@@ -451,7 +451,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
           cg:cg,
           pload:pload,
           batcap:batcap,
-          ccom:ccom,
+         // ccom:ccom,
          // fval:fval,
          // recomendation:recomendation
         }
@@ -545,10 +545,10 @@ var Cxls = function(box) {
         }, function(err, result) {
           if(err) {
             data = err;
-            console.error(err);
+           // console.error(err);
           } else {
             data = result;
-            console.log(result);
+         //   console.log(result);
           }
             //"date":"12/21/17"dat =
       //datmin = request.query.min;//request.body.min; 
