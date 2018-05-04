@@ -365,9 +365,9 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
         //action
 
-        if(cg == cpv){
+        if(parseFloat(cg) == parseFloat(cpv) ){
           ccom ="equal";
-        }else if(cg > cpv){
+        }else if(parseFloat(cg) > parseFloat(cpv)){
           ccom = "cg";
         }else {
           ccom = "cpv";
