@@ -353,7 +353,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
       action = [];
 
       for(var i=0; i<24 ; i++){
-      i=0;
+      //i=0;
         cpv = box.c[i]["c pv"];
         cg = box.c[i]["c pln"];
         if(i < box.pload.length){
