@@ -92,7 +92,7 @@ router.get('/view/:id_user/all', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT id, nama_switch, status_switch FROM switch ORDER BY id ASC WHERE id_user = $1;",
+    text: "SELECT id, nama_switch, status_switch FROM switch WHERE id_user = $1 ORDER BY id ASC ;",
     values: [request.params.id_user]
   }
 pool.query(query, (err, res) => {
@@ -105,7 +105,8 @@ pool.query(query, (err, res) => {
  }
 
         var query = {
-          text: "SELECT id, nama_switch, status_switch FROM main_switch ORDER BY id ASC;"
+          text: "SELECT id, nama_switch, status_switch FROM main_switch WHERE id_user = $1 ORDER BY id ASC;",
+          values: [request.params.id_user]
         }
         pool.query(query, (err, res) => {
         if (err) {
