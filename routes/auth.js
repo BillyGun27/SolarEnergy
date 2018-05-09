@@ -119,17 +119,22 @@ router.post('/login', function(request, response, next) {
       console.log(decodedPayload, decodedHeader);
     }
   });
-
+              var obj = {token:result, email:request.body.email , res:out};
 
               }else{
                 console.log("password false");
                 result="password false"; 
+
+              var obj = {status:result};
+                
               }
                
 
             }else{
               console.log("email false");
               result="email false"; 
+
+              var obj = {status:result};
             }
           //console.log(res)
         }
@@ -138,7 +143,7 @@ router.post('/login', function(request, response, next) {
         //  if(result){
          //   response.redirect('/home')
        //   }else{
-            var obj = {token:result, email:request.body.email , res:out};
+           
             response.send(JSON.stringify(obj));
          // }
         //response.end();

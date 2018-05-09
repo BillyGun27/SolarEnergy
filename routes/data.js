@@ -354,8 +354,20 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
       for(var i=0; i<24 ; i++){
       //i=0;
-        cpv = box.c[i]["c pv"];
-        cg = box.c[i]["c pln"];
+
+      cpv =0;// box.c[i]["c pv"];
+      cg =0; //box.c[i]["c pln"];
+      if (box.c[i].hasOwnProperty('c pln')) {
+        // do something
+        cg =box.c[i]['c pln'];
+      }
+
+      if (box.c[i].hasOwnProperty('c pv')) {
+        // do something
+        cpv =box.c[i]['c pv'];
+      }
+
+       
         if(i < box.pload.length){
           pload = box.pload[i].watt;
         }else{
@@ -562,7 +574,19 @@ var Cxls = function(box) {
       
    //      response.send(output); 
         // response.send(data); 
-        c = {pln:output[0]['c pln'],pv:output[0]['c pv']}
+        pln = 0; pv=0
+        if (output[0].hasOwnProperty('c pln')) {
+          // do something
+          pln =output[0]['c pln'];
+        }
+
+        if (output[0].hasOwnProperty('c pv')) {
+          // do something
+          pv =output[0]['c pv'];
+        }
+
+
+        c = {pln:pln ,pv:pv }
         
         resolve({p:box.p,c:c,capex:box.capex});  
          
