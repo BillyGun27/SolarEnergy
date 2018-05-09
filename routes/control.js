@@ -150,7 +150,7 @@ router.get('/count/:id_user', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT status_switch, COUNT(status_switch) AS jumlah FROM public.switch WHERE id_user = $1 GROUP BY status_switch ;",
+    text: "SELECT  id_user,status_switch, COUNT(status_switch) AS jumlah FROM public.switch WHERE id_user = $1 GROUP BY status_switch ;",
     values: [request.params.id_user]
   }
 
