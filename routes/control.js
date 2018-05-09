@@ -105,7 +105,7 @@ pool.query(query, (err, res) => {
  }
 
         var query = {
-          text: "SELECT id, nama_switch, status_switch FROM main_switch WHERE id_user = $1 ORDER BY id ASC;",
+          text: "SELECT id, nama_switch, status_switch FROM main_switch WHERE user_id = $1 ORDER BY id ASC;",
           values: [request.params.id_user]
         }
         pool.query(query, (err, res) => {
