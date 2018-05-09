@@ -16,7 +16,19 @@ function InsertMainSwitch(){
     // give the query a unique name
    // name: 'get_sensor',
     text: "INSERT INTO main_switch(user_id, nama_switch, status_switch) VALUES ( (SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1), 'Solar Power', '0');"
-          +"INSERT INTO main_switch( user_id, nama_switch, status_switch) VALUES ( (SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1), 'Grid PLN', '0');",
+          +"INSERT INTO main_switch( user_id, nama_switch, status_switch) VALUES ( (SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1), 'Grid PLN', '0');"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),1 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),2 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),4 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),5 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),6 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),7 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),8 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),9 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),10 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),11 );"
+          +"INSERT INTO public.switch( status_switch, id_user ,id_switch) VALUES (  '0' ,(SELECT id FROM public.user_account ORDER BY id DESC LIMIT 1),12 );"
+          ,
   }
 
   pool.query(query, (err, res) => {

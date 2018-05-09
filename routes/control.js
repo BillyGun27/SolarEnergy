@@ -17,6 +17,7 @@ router.get('/', function(request, response, next) {
 
 });
 
+//user based
 router.post('/insert', function(request, response, next) {
   // callback//req.params
   var result;
@@ -57,6 +58,7 @@ pool.query(query, (err, res) => {
 
 });
 
+
 router.get('/switch/:type/:id', function(request, response, next) {
   // callback//req.params
   var result;
@@ -85,11 +87,13 @@ pool.query(query, (err, res) => {
 
 });
 
-router.get('/view/all', function(request, response, next) {
+//user based
+router.get('/view/:id_user/all', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT id, nama_switch, status_switch FROM switch ORDER BY id ASC;"
+    text: "SELECT id, nama_switch, status_switch FROM switch ORDER BY id ASC WHERE id_user = $1;",
+    values: [request.params.id_user]
   }
 pool.query(query, (err, res) => {
  if (err) {
@@ -142,11 +146,12 @@ pool.query(query, (err, res) => {
 
 });
 
-router.get('/count', function(request, response, next) {
+router.get('/count/:id_user', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT status_switch, COUNT(status_switch) AS jumlah FROM public.switch GROUP BY status_switch ;"
+    text: "SELECT status_switch, COUNT(status_switch) AS jumlah FROM public.switch WHERE id_user = $1 GROUP BY status_switch ;",
+    values: [request.params.id_user]
   }
 
 pool.query(query, (err, res) => {
@@ -162,6 +167,26 @@ pool.query(query, (err, res) => {
 
 });
 
+router.get('/total/:id_user', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    text: "SELECT id_user, COUNT(id_user) AS jumlah FROM public.switch WHERE id_user = $1 GROUP BY id_user ;",
+    values: [request.params.id_user]
+  }
+
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+});
 
 
 
