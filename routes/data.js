@@ -659,10 +659,10 @@ router.get('/saving/:id', function(request, response, next) {
         //}
         
 
-       // rec = Rbox.recomendation[curtime];
+        rec = Rbox.recomendation[0];
 
         //console.log(box);
-        response.send({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box, recomendation: Rbox.recomendation}); 
+        response.send({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box, recomendation: rec}); 
 
             
           });
