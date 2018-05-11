@@ -325,6 +325,147 @@ var Rxls = function(box) {
   return promise;
 };
 
+var recomFormula = function(box) {
+  var promise = new Promise(function(resolve, reject){
+
+    batcap = box.batcap[0].batcap
+    // successMessage is whatever we passed in the resolve(...) function above.
+    // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+
+    action = [];
+
+    for(var i=0; i<24 ; i++){
+    //i=0;
+
+    cpv =0;// box.c[i]["c pv"];
+    cg =0; //box.c[i]["c pln"];
+    if (box.c[i].hasOwnProperty('c pln')) {
+      // do something
+      cg =box.c[i]['c pln'];
+    }
+
+    if (box.c[i].hasOwnProperty('c pv')) {
+      // do something
+      cpv =box.c[i]['c pv'];
+    }
+
+     
+      if(i < box.pload.length){
+        pload = box.pload[i].watt;
+      }else{
+        pload = 0;
+      }
+     
+      batcap = box.batcap[0].batcap;
+
+      //action
+      recomendation="";
+      ftot={};
+      if(parseFloat(cg) == parseFloat(cpv) ){
+        chigh ="equal";
+        if(batcap<=20){
+          ftot = pload * parseFloat(cg);
+
+          fval={ftot:ftot};
+          recomendation="grid";
+        }else if(20<batcap && batcap<=50){
+          ftot=( ( (0.4)*pload*parseFloat(cg) )+ ( (0.6)*pload*parseFloat(cpv) ) );
+          fg=( (0.4)*pload*parseFloat(cg) );
+          fpv=( (0.6)*pload*parseFloat(cpv) );
+
+          fval={ftot:ftot,fg:fg,fpv:fpv};
+          if(Math.min(ftot, fg,fpv) == ftot ){
+            recomendation="kombinasi";
+          }else if(Math.min(ftot, fg,fpv) == fg ){
+            recomendation="grid";
+          }else if(Math.min(ftot, fg,fpv) == fpv ){
+            recomendation="pv";
+          }
+        }else if(batcap>50){
+          ftot = pload * parseFloat(cpv);
+
+          fval={ftot:ftot};
+          recomendation="pv";
+        }
+      }else if(parseFloat(cg) > parseFloat(cpv)){
+        chigh = "cg";
+        if(batcap<=20){
+          ftot = pload * parseFloat(cg);
+
+          fval={ftot:ftot};
+          recomendation="grid";
+        }else if(20<batcap && batcap<=50){
+          ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
+          fg=( (0.5)*pload*parseFloat(cg) );
+          fpv=( (0.5)*pload*parseFloat(cpv) );
+
+          fval={ftot:ftot,fg:fg,fpv:fpv};
+          if(Math.min(ftot, fg,fpv) == ftot ){
+            recomendation="kombinasi";
+          }else if(Math.min(ftot, fg,fpv) == fg ){
+            recomendation="grid";
+          }else if(Math.min(ftot, fg,fpv) == fpv ){
+            recomendation="pv";
+          }
+        }else if(batcap>50){
+          ftot = pload * parseFloat(cpv);
+
+          fval={ftot:ftot};
+         recomendation="pv";
+        }
+      }else {
+        chigh = "cpv";
+        if(batcap<=20){
+          ftot = pload * parseFloat(cg);
+
+          fval={ftot:ftot};
+          recomendation="grid";
+        }else if(20<batcap && batcap<=50){
+          ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
+          fg=( (0.5)*pload*parseFloat(cg) );
+          fpv=( (0.5)*pload*parseFloat(cpv) );
+
+          fval={ftot:ftot,fg:fg,fpv:fpv};
+          if(Math.min(ftot, fg,fpv) == ftot ){
+            recomendation="kombinasi";
+          }else if(Math.min(ftot, fg,fpv) == fg ){
+            recomendation="grid";
+          }else if(Math.min(ftot, fg,fpv) == fpv ){
+            recomendation="pv";
+          }
+        }else if(batcap>50){
+          ftot = pload * parseFloat(cpv);
+
+          fval={ftot:ftot};
+          recomendation="pv";
+        }
+
+      }
+
+      data = {
+        jam:i+1,
+        cpv:cpv,
+        cg:cg,
+        pload:pload,
+        batcap:batcap,
+        chigh:chigh,
+        fval:fval,
+        recomendation:recomendation
+      }
+
+      action.push(data);
+    }
+
+
+        resolve({recomendation:action});  
+         
+    
+   
+      
+  });
+  return promise;
+};
+
 /** P load every hour
  * SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year 
 FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC 
@@ -345,146 +486,10 @@ router.get('/rekomendasi/:id', function(request, response, next) {
     recomCaller(query)
     .then(recomChain)
     .then(Rxls)
+    .then(recomFormula)
     .then((box) => {
-      batcap = box.batcap[0].batcap
-      // successMessage is whatever we passed in the resolve(...) function above.
-      // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
-
-      action = [];
-
-      for(var i=0; i<24 ; i++){
-      //i=0;
-
-      cpv =0;// box.c[i]["c pv"];
-      cg =0; //box.c[i]["c pln"];
-      if (box.c[i].hasOwnProperty('c pln')) {
-        // do something
-        cg =box.c[i]['c pln'];
-      }
-
-      if (box.c[i].hasOwnProperty('c pv')) {
-        // do something
-        cpv =box.c[i]['c pv'];
-      }
-
-       
-        if(i < box.pload.length){
-          pload = box.pload[i].watt;
-        }else{
-          pload = 0;
-        }
-       
-        batcap = box.batcap[0].batcap;
-
-        //action
-        recomendation="";
-        ftot={};
-        if(parseFloat(cg) == parseFloat(cpv) ){
-          chigh ="equal";
-          if(batcap<=20){
-            ftot = pload * parseFloat(cg);
-
-            fval={ftot:ftot};
-            recomendation="grid";
-          }else if(20<batcap && batcap<50){
-            ftot=( ( (0.4)*pload*parseFloat(cg) )+ ( (0.6)*pload*parseFloat(cpv) ) );
-            fg=( (0.4)*pload*parseFloat(cg) );
-            fpv=( (0.6)*pload*parseFloat(cpv) );
-
-            fval={ftot:ftot,fg:fg,fpv:fpv};
-            if(Math.min(ftot, fg,fpv) == ftot ){
-              recomendation="kombinasi";
-            }else if(Math.min(ftot, fg,fpv) == fg ){
-              recomendation="grid";
-            }else if(Math.min(ftot, fg,fpv) == fpv ){
-              recomendation="pv";
-            }
-          }else if(batcap>=50){
-            ftot = pload * parseFloat(cpv);
-
-            fval={ftot:ftot};
-            recomendation="pv";
-          }
-        }else if(parseFloat(cg) > parseFloat(cpv)){
-          chigh = "cg";
-          if(batcap<=20){
-            ftot = pload * parseFloat(cg);
-
-            fval={ftot:ftot};
-            recomendation="grid";
-          }else if(20<batcap && batcap<50){
-            ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
-            fg=( (0.5)*pload*parseFloat(cg) );
-            fpv=( (0.5)*pload*parseFloat(cpv) );
-
-            fval={ftot:ftot,fg:fg,fpv:fpv};
-            if(Math.min(ftot, fg,fpv) == ftot ){
-              recomendation="kombinasi";
-            }else if(Math.min(ftot, fg,fpv) == fg ){
-              recomendation="grid";
-            }else if(Math.min(ftot, fg,fpv) == fpv ){
-              recomendation="pv";
-            }
-          }else if(batcap>=50){
-            ftot = pload * parseFloat(cpv);
-
-            fval={ftot:ftot};
-           recomendation="pv";
-          }
-        }else {
-          chigh = "cpv";
-          if(batcap<=20){
-            ftot = pload * parseFloat(cg);
-
-            fval={ftot:ftot};
-            recomendation="grid";
-          }else if(20<batcap && batcap<50){
-            ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
-            fg=( (0.5)*pload*parseFloat(cg) );
-            fpv=( (0.5)*pload*parseFloat(cpv) );
-
-            fval={ftot:ftot,fg:fg,fpv:fpv};
-            if(Math.min(ftot, fg,fpv) == ftot ){
-              recomendation="kombinasi";
-            }else if(Math.min(ftot, fg,fpv) == fg ){
-              recomendation="grid";
-            }else if(Math.min(ftot, fg,fpv) == fpv ){
-              recomendation="pv";
-            }
-          }else if(batcap>=50){
-            ftot = pload * parseFloat(cpv);
-
-            fval={ftot:ftot};
-            recomendation="pv";
-          }
-
-        }
-
-        data = {
-          jam:i+1,
-          cpv:cpv,
-          cg:cg,
-          pload:pload,
-          batcap:batcap,
-          chigh:chigh,
-          fval:fval,
-          recomendation:recomendation
-        }
-
-        action.push(data);
-      }
-      /**
-        
-           var capacity =  res.rows[0].batcap;
-        if(capacity > 20){
-          result="kombinasi";
-        }else if(capacity < 20){
-          result="pln";
-        }
-
-       **/
-      //console.log(successMessage);.batcap[0].batcap
-      response.send(action); 
+     
+      response.send(box.recomendation); 
     });
 
 });
@@ -586,7 +591,7 @@ var Cxls = function(box) {
         }
 
 
-        c = {pln:pln ,pv:pv }
+        c = { pln:pln ,pv:pv }
         
         resolve({p:box.p,c:c,capex:box.capex});  
          
@@ -628,7 +633,7 @@ router.get('/saving/:id', function(request, response, next) {
 
         fpln = box.p.pln * box.c.pln;
         fpv = box.p.pv * box.c.pv;
-        fsaving = box.p.load *  box.c.pv + box.capex;
+        fsaving = box.p.load *  box.c.pv - box.capex;
 
         //console.log(box);
         response.send({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box}); 
