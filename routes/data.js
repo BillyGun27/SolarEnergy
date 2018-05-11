@@ -652,8 +652,17 @@ router.get('/saving/:id', function(request, response, next) {
         fpv = box.p.pv * box.c.pv;
         fsaving = box.p.load *  box.c.pv - box.capex;
 
+        if(ind.format('H') = 0){
+          curtime = 24;
+        }else{
+          curtime = ind.format('H')-1;
+        }
+        
+
+        rec = Rbox.recomendation[curtime];
+
         //console.log(box);
-        response.send({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box, recomendation:Rbox.recomendation }); 
+        response.send({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box, recomendation: rec}); 
 
             
           });
