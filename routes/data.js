@@ -627,7 +627,24 @@ router.get('/saving/:id', function(request, response, next) {
       .then(savingChain)
       .then(Cxls)
       .then((box) => {
-        // successMessage is whatever we passed in the resolve(...) function above.
+
+        var Rquery=[];
+        Rquery[0] = {//battery capacity
+          text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+          values: [request.params.id]
+        }
+      
+        Rquery[1] = {//pload
+         text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
+        }
+      
+          recomCaller(Rquery)
+          .then(recomChain)
+          .then(Rxls)
+          .then(recomFormula)
+          .then((Rbox) => {
+           
+              // successMessage is whatever we passed in the resolve(...) function above.
         // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
         //rumus
 
@@ -636,7 +653,12 @@ router.get('/saving/:id', function(request, response, next) {
         fsaving = box.p.load *  box.c.pv - box.capex;
 
         //console.log(box);
-        response.send({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box}); 
+        response.send({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box, recomendation:Rbox.recomendation }); 
+
+            
+          });
+
+      
       });
 
      
