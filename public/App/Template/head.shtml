@@ -2,18 +2,18 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
       
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<link rel="shortcut icon" type="image/x-icon" href="../web/App/Public/img/logo.png">
+<link rel="shortcut icon" type="image/x-icon" href="/App/Public/img/logo.png">
       
-<link rel="stylesheet" href="../web/bower_components/bootstrap/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="../web/bower_components/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="../web/bower_components/Ionicons/css/ionicons.min.css">
-<link rel="stylesheet" href="../web/dist/css/AdminLTE.css">
+<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css">
+<link rel="stylesheet" href="/dist/css/AdminLTE.css">
 <!--<link rel="stylesheet" href="../web/dist/css/skins/skin-blue.min.css">-->
-<link rel="stylesheet" href="../web/plugins/iCheck/square/blue.css">
+<link rel="stylesheet" href="/plugins/iCheck/square/blue.css">
 <!-- daterange picker -->
-<link rel="stylesheet" href="../web/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 <!-- bootstrap datepicker -->
-<link rel="stylesheet" href="../web/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
       

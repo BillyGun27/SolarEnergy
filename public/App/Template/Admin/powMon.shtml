@@ -27,7 +27,7 @@
               <div class="row" style="padding: 25px">
                   <div class="inner">
                     <div style="padding-right: 30px; padding-left: 30px">
-                        <img src="../web/App/Public/img/Solar Power.png" style="width: 15%;">
+                        <img src="/App/Public/img/Solar Power.png" style="width: 15%;">
                         <span style="color: black; text-align: center; font-size: 25px"><b>Solar Power</b></span>
                         
                     </div>
@@ -53,7 +53,7 @@
               <div class="row" style="padding: 25px">
                   <div class="inner">
                     <div style="padding-right: 30px; padding-left: 30px">
-                        <img src="../web/App/Public/img/Grid PLN.png" style="width: 15%;">
+                        <img src="/App/Public/img/Grid PLN.png" style="width: 15%;">
                         <span style="color: black; text-align: center; font-size: 25px"><b>Grid PLN</b></span>
                     
                     </div>

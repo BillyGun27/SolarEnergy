@@ -28,9 +28,9 @@
                   <div class="inner">
                     <h3 style="color: black; text-align: center; font-size: 20px">Power Control</h3>
                     <div style="padding-right: 30px; padding-left: 30px">
-                        <img src="../web/App/Public/img/Solar Power.png" style="width: 30%;">
+                        <img src="/App/Public/img/Solar Power.png" style="width: 30%;">
 
-                        <img src="../web/App/Public/img/PLN.png" style="width: 30%; float: right;">
+                        <img src="/App/Public/img/PLN.png" style="width: 30%; float: right;">
                     </div>
                     <div style="padding-right: 30px; padding-left: 30px">
                         
@@ -58,7 +58,7 @@
                     <h3 style="color: black; text-align: center; font-size: 20px">Home Appliances</h3>
                     
                     <div style="padding: 30px">
-                        <img src="../web/App/Public/img/Home apps off.png" style="width: 35%;">
+                        <img src="/App/Public/img/Home apps off.png" style="width: 35%;">
                         <!--<span class="fa fa-power-off" style="color: #e5002d; font-size: 100px; float: left;"></span>-->
 
                         <p style="float: right; font-size: 20px; color: black"><span style="font-size: 40px;" id="countSwitchOff">--</span><br>off</p>
@@ -80,7 +80,7 @@
                     <h3 style="color: black; text-align: center; font-size: 20px">Home Appliances</h3>
                     
                     <div style="padding: 30px">
-                        <img src="../web/App/Public/img/Home apps on.png" style="width: 35%;">
+                        <img src="/App/Public/img/Home apps on.png" style="width: 35%;">
                         <!--<span class="fa fa-power-off" style="color: green; font-size: 100px; float: left;"></span>-->
 
                         <p style="float: right; font-size: 20px; color: black"><span style="font-size: 40px;" id="countSwitchOn">--</span><br>on</p>

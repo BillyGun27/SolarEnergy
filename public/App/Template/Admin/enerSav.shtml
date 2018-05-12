@@ -27,7 +27,7 @@
               <div class="row" style="padding: 15px">
                   <div class="inner">
                     <div class="col-lg-4 col-xs-4" style="padding: 20px">
-                        <img src="../web/App/Public/img/PLN.png" style="width: 80%;">
+                        <img src="/App/Public/img/PLN.png" style="width: 80%;">
                         <!--<span class="fa fa-battery-full" style="color: #e5002d; font-size: 50px; float: left;"></span>-->
                     </div>
                     <div class="col-lg-8">
@@ -52,7 +52,7 @@
               <div class="row" style="padding: 15px">
                   <div class="inner">
                     <div class="col-lg-4 col-xs-4" style="padding: 20px">
-                        <img src="../web/App/Public/img/Solar Power.png" style="width: 80%;">
+                        <img src="/App/Public/img/Solar Power.png" style="width: 80%;">
                         <!--<span class="fa fa-battery-full" style="color: #e5002d; font-size: 50px; float: left;"></span>-->
                     </div>
                     <div class="col-lg-8">
@@ -78,7 +78,7 @@
                   <div class="inner">
                     <div class="col-lg-4 col-xs-4" style="padding: 20px; ">
                         
-                        <img src="../web/App/Public/img/Star_Coin.png" style="width: 80%;">
+                        <img src="/App/Public/img/Star_Coin.png" style="width: 80%;">
                     </div>
                     <div class="col-lg-8">
                       <h3 style="color: black; font-size: 36px; text-align: center;">Saving</h3>

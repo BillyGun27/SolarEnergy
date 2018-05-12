@@ -9,7 +9,7 @@ var AuthController = function(){
 
 
   if(session.get('token')){
-    Redirect.start('../admin/dashboard');
+    Redirect.start('../home');
   }
   
   var loginSubmit = function(email, password){
@@ -29,7 +29,7 @@ var AuthController = function(){
         session.set('token', service.response().token);
         session.set('user', service.response().res[0].id);
         session.set('email', service.response().email);
-        Redirect.start('../admin/dashboard');
+        Redirect.start('../home');
       }
       else{
         session.destroy();
