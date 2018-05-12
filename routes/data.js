@@ -658,7 +658,7 @@ router.get('/saving/:id', function(request, response, next) {
        fpln = values[0].p.pln * values[0].c.pln;
             fpv = values[0].p.pv * values[0].c.pv;
           //  fsaving = box.p.load *  box.c.pv - box.capex;
-     response.send({fpln:fpln,fpv:fpv,fsaving:fsaving ,variable:values})
+     response.send({fpln:fpln,fpv:fpv ,variable:values})
     });
 
 
