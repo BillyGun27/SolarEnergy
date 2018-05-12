@@ -652,6 +652,7 @@ router.get('/saving/:id', function(request, response, next) {
         fpv = box.p.pv * box.c.pv;
         fsaving = box.p.load *  box.c.pv - box.capex;
 
+        var curtime = 0;
         if(ind.format('H') = 0){
           curtime = 24;
         }else{
