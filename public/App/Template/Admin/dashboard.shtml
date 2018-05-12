@@ -1,0 +1,193 @@
+<div class="wrapper">
+  <header id="header"></header>
+  <aside id="side"></aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Dashboard
+      </h1>
+      
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!--------------------------
+        | Your Page Content Here |
+        -------------------------->
+        
+        <div class="row">
+
+          <div class="col-lg-3">
+            <!-- small box -->
+            <div class="small-box" style="background-color: white;min-height: 130px">
+              <div class="row" style="padding: 15px">
+                  <div class="inner">
+                    <div class="col-lg-4 col-xs-4" style="padding: 20px">
+                        <img src="../web/App/Public/img/Home apps on.png" style="width: 150%;">
+                        <!---<span class="fa fa-power-off" style="color: green; font-size: 50px; float: left;"></span>-->
+                    </div>
+                    <div class="col-lg-8">
+                      <h3 style="color: black; font-size: 16px; text-align: right;">Home Appliances</h3>
+                      
+                      <div style="padding-right: 15px">
+                          <p style="float: right; font-size: 14px; color: black"><span style="font-size: 30px;" id="countSwitchOn">--</span><br>on</p>
+                          
+                          <span class="fa fa-angle-right" style="color: #00c3d8; font-size: 50px; float: right; margin-right: 10px"></span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+               
+              </div>
+          </div>
+
+          <div class="col-lg-3">
+            <!-- small box -->
+            <div class="small-box" style="background-color: white;min-height: 130px">
+              <div class="row" style="padding: 15px">
+                  <div class="inner">
+                    <div class="col-lg-4 col-xs-4" style="padding: 20px">
+                        <img src="../web/App/Public/img/Battery Capacity.png" style="width: 150%;">
+                        <!--<span class="fa fa-battery-full" style="color: #e5002d; font-size: 50px; float: left;"></span>-->
+                    </div>
+                    <div class="col-lg-8">
+                      <h3 style="color: black; font-size: 16px; text-align: right;">Battery Capacity</h3>
+                      
+                      <div style="padding-right: 15px">
+                          <p style="float: right; font-size: 14px; color: black"><span style="font-size: 30px;" id="totalBatteryCapacity">--</span><br>%</p>
+                          
+                          <span class="fa fa-angle-right" style="color: #00c3d8; font-size: 50px; float: right; margin-right: 10px"></span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+               
+              </div>
+          </div>
+
+          <div class="col-lg-3">
+            <!-- small box -->
+            <div class="small-box" style="background-color: white;min-height: 130px">
+              <div class="row" style="padding: 15px">
+                  <div class="inner">
+                    <div class="col-lg-4 col-xs-4" style="padding: 20px">
+                        <img src="../web/App/Public/img/Solar Energy.png" style="width: 150%;">
+                        <!--<span class="fa fa-sun-o" style="color: orange; font-size: 50px; float: left;"></span>-->
+                    </div>
+                    <div class="col-lg-8">
+                      <h3 style="color: black; font-size: 16px; text-align: right;">Solar Energy</h3>
+                      
+                      <div style="padding-right: 15px">
+                          <p style="float: right; font-size: 14px; color: black"><span style="font-size: 30px;" id="totalSolarKwh">--</span><br>kWh</p>
+                          
+                          <span class="fa fa-angle-right" style="color: #00c3d8; font-size: 50px; float: right; margin-right: 10px"></span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+               
+              </div>
+          </div>
+
+          <div class="col-lg-3">
+            <!-- small box -->
+            <div class="small-box" style="background-color: white;min-height: 130px">
+              <div class="row" style="padding: 15px">
+                  <div class="inner">
+                    <div class="col-lg-4 col-xs-4" style="padding: 20px">
+                        <img src="../web/App/Public/img/Grid PLN.png" style="width: 150%;">
+                        <!--<span class="fa fa-bolt" style="color: blue; font-size: 50px; float: left;"></span>-->
+                    </div>
+                    <div class="col-lg-8">
+                      <h3 style="color: black; font-size: 16px; text-align: right;">Grid PLN</h3>
+                      
+                      <div style="padding-right: 15px">
+                          <p style="float: right; font-size: 14px; color: black"><span style="font-size: 30px;" id="totalPlnKwh">--</span><br>kWh</p>
+                          
+                          <span class="fa fa-angle-right" style="color: #00c3d8; font-size: 50px; float: right; margin-right: 10px"></span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+               
+              </div>
+          </div>
+
+          
+        </div>
+
+
+        <div class="row">
+          <div class="col-lg-12">
+              <!-- LINE CHART -->
+              <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Power Log</h3>
+                  <p id="log">Log...</p>
+                  <!-- Date and time range -->
+                  <div class="form-group" style="float: right;">
+                    <div class="input-group">
+                      <select class="btn btn-default pull-right" id="selectDay">
+                        <option value="day" selected>Day</option>
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- /.form group -->
+
+                </div>
+                <div class="box-body">
+                  <div class="chart">
+                    <canvas id="lineChart" width="400" height="200"></canvas>
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <!-- /.box -->
+
+            </div>
+        </div>
+        
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+<!-- Optionally, you can add Slimscroll and FastClick plugins.
+     Both of these plugins are recommended to enhance the
+     user experience. -->
+
+  <footer id="footer" class="main-footer"></footer>
+</div>
+<style>
+    .box-status {
+      text-align: center;
+      display:inline-block; 
+      position:relative; 
+      width: 25px;
+      height:20px;
+      border-radius:8px;
+      -moz-border-radius:8px;
+      margin-right: 10px;
+    }
+    .vertical {
+      display: inline-block;
+      width: 20%;
+      height: 40px;
+      -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+      transform: rotate(-90deg);
+      opacity: 0.5;
+    }
+}
+</style>

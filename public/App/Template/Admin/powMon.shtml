@@ -1,0 +1,126 @@
+<div class="wrapper">
+  <header id="header"></header>
+  <aside id="side"></aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Power Monitoring
+      </h1>
+      
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <!--------------------------
+        | Your Page Content Here |
+        -------------------------->
+        
+        <div class="row">
+
+          <div class="col-lg-6">
+            <!-- small box -->
+            <div class="small-box" style="background-color: white;height: 300px">
+              <div class="row" style="padding: 25px">
+                  <div class="inner">
+                    <div style="padding-right: 30px; padding-left: 30px">
+                        <img src="../web/App/Public/img/Solar Power.png" style="width: 15%;">
+                        <span style="color: black; text-align: center; font-size: 25px"><b>Solar Power</b></span>
+                        
+                    </div>
+                    <div class="gauge" style="text-align: center">
+                      <canvas id="solarPowerGauge"></canvas>
+                      <div style="color: #000; font-size: 30px; margin-top: -100px" id="solarStat">--</div>
+
+                      <div style="color: #000; font-size: 15px;">Watt</div>
+
+                      <div id="vSolar" class="col-lg-6" style="color: #000; font-size: 15px; margin-top: 60px; text-align: right;">V : 0</div>
+                      <div id="iSolar" class="col-lg-6" style="color: #000; font-size: 15px; margin-top: 60px; text-align: left;">I : 0</div>
+                      
+                    </div>
+                  </div>
+                </div>
+               
+              </div>
+          </div>
+
+          <div class="col-lg-6">
+            <!-- small box -->
+            <div class="small-box" style="background-color: white;height: 300px">
+              <div class="row" style="padding: 25px">
+                  <div class="inner">
+                    <div style="padding-right: 30px; padding-left: 30px">
+                        <img src="../web/App/Public/img/Grid PLN.png" style="width: 15%;">
+                        <span style="color: black; text-align: center; font-size: 25px"><b>Grid PLN</b></span>
+                    
+                    </div>
+                    <div class="gauge" style="text-align: center">
+                      <canvas id="gridPowerGauge"></canvas>
+                      <div style="color: #000; font-size: 30px; margin-top: -100px" id="plnStat">--</div>
+
+                      <div style="color: #000; font-size: 15px;">Watt</div>
+
+
+                      <div id="vPln" class="col-lg-6" style="color: #000; font-size: 15px; margin-top: 60px; text-align: right;">V : 0</div>
+                      <div id="iPln" class="col-lg-6" style="color: #000; font-size: 15px; margin-top: 60px; text-align: left;">I : 0</div>
+                      
+                    </div>
+                  </div>
+                </div>
+               
+              </div>
+          </div>
+
+          <div class="col-lg-6 col-xs-12">
+            <!-- /.row -->
+            <div class="row" id="batteryHistory" style="height: 500px;overflow-y: auto">
+              Battery History
+            </div>    
+          </div>
+
+          <div class="col-lg-6 col-xs-12">
+            <!-- /.row -->
+            <div class="row" id="plnHistory" style="height: 500px;overflow-y: auto">
+              PLN History
+            </div>    
+          </div>
+          
+        </div>
+
+
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+<!-- Optionally, you can add Slimscroll and FastClick plugins.
+     Both of these plugins are recommended to enhance the
+     user experience. -->
+
+  <footer id="footer" class="main-footer"></footer>
+</div>
+<style>
+    .box-status {
+      text-align: center;
+      display:inline-block; 
+      position:relative; 
+      width: 25px;
+      height:20px;
+      border-radius:8px;
+      -moz-border-radius:8px;
+      margin-right: 10px;
+    }
+    .vertical {
+      display: inline-block;
+      width: 20%;
+      height: 40px;
+      -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+      transform: rotate(-90deg);
+      opacity: 0.5;
+    }
+}
+</style>
