@@ -127,7 +127,7 @@ node_xj({
    // console.error(err);
   } else {
     data = result;
-    console.log(result);
+   // console.log(result);
   }
 });
 
