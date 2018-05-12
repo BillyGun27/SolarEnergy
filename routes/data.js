@@ -621,11 +621,11 @@ router.get('/saving/:id', function(request, response, next) {
       .then(Cxls)
       .then((box) => {
           return new Promise(function(resolve) {
-            fpln = box.p.pln * box.c.pln;
-            fpv = box.p.pv * box.c.pv;
-            fsaving = box.p.load *  box.c.pv - box.capex;
-
-            resolve({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box }); 
+          //  fpln = box.p.pln * box.c.pln;
+          //  fpv = box.p.pv * box.c.pv;
+          //  fsaving = box.p.load *  box.c.pv - box.capex;
+            //fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box
+            resolve({ p:box.p, c:box.c , capex :box.capex }); 
         
           });
       
@@ -648,14 +648,17 @@ router.get('/saving/:id', function(request, response, next) {
     .then((box) => {
         return new Promise(function(resolve) {
       
-            resolve({rec:box.recomendation}); 
+            resolve({rec:box.recomendation[0]}); 
         
         });
     });
 
     Promise.all([savingPromise,recomPromise]).then(function(values) {
      // console.log(values);
-     response.send(values)
+       fpln = values[0].p.pln * values[0].c.pln;
+            fpv = values[0].p.pv * values[0].c.pv;
+          //  fsaving = box.p.load *  box.c.pv - box.capex;
+     response.send({fpln:fpln,fpv:fpv,fsaving:fsaving ,variable:values})
     });
 
 
