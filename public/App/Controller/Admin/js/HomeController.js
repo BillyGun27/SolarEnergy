@@ -116,6 +116,7 @@ var HomeController = function(){
 		if(menu == 'home'  || menu == ''){
 			getCountDevice();
 			getLoadPower(jenisDay);
+			totalBatteryCapacity();
 		}
 		else if(menu == 'enerAss'){
 		}
@@ -639,6 +640,27 @@ var HomeController = function(){
 					$('#countSwitchOn').html(countSwitchOn);
 	        	}
 			}
+	      }
+
+    	});
+		
+	}
+
+	var totalBatteryCapacity = function(){
+		service.start({
+	      type: 'get', 
+	      uri: App.baseAPI() + '/data/batcap/' + currentId,
+	      timeout: 60000,
+	      loading: false
+	    }, function(){
+
+	      if(service.isSuccessful()){
+	        var data = service.response();
+			var capacity = data[0].batcap;
+
+					$('#totalBatteryCapacity').html(capacity);
+	        	
+			
 	      }
 
     	});
