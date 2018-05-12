@@ -484,7 +484,9 @@ router.get('/rekomendasi/:id', function(request, response, next) {
   }
 
  query[1] = {//pload
-   text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
+  
+  //text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
+  text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= "+ind.format('D')+" AND date_part('month', receive_date::date )= "+ind.format('M')+" GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
  }
 
     recomCaller(query)
@@ -610,11 +612,11 @@ var Cxls = function(box) {
 router.get('/saving/:id', function(request, response, next) {
   // callback//req.params
       var query=[];
-       query[0] = {
+       query[0] = {//total watt
         text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt FROM energy GROUP BY tipe_energy",
       }
 
-      query[1] = {
+      query[1] = {//capex
         text: "SELECT  biaya_investasi,  lifetime_sistem_pv,biaya_investasi::float/(24* lifetime_sistem_pv::float  * 365 ) AS Capex FROM user_account WHERE id = $1;",
        values: [request.params.id]
       }
@@ -642,8 +644,10 @@ router.get('/saving/:id', function(request, response, next) {
   }
 
  Rquery[1] = {//pload
-   text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
- }
+   //text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
+   text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= "+ind.format('D')+" AND date_part('month', receive_date::date )= "+ind.format('M')+" GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
+ 
+  }
 
   var recomPromise =  recomCaller(Rquery)
     .then(recomChain)
