@@ -655,7 +655,7 @@ router.get('/saving/:id', function(request, response, next) {
 
     Promise.all([savingPromise,recomPromise]).then(function(values) {
      // console.log(values);
-       fpln = values[0].p.pln * values[0].c.pln;
+            fpln = values[0].p.pln * values[0].c.pln;
             fpv = values[0].p.pv * values[0].c.pv;
 
           if(batcap<=20){
