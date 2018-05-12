@@ -620,13 +620,14 @@ router.get('/saving/:id', function(request, response, next) {
       .then(savingChain)
       .then(Cxls)
       .then((box) => {
+          return new Promise(function(resolve) {
+            fpln = box.p.pln * box.c.pln;
+            fpv = box.p.pv * box.c.pv;
+            fsaving = box.p.load *  box.c.pv - box.capex;
 
-          fpln = box.p.pln * box.c.pln;
-          fpv = box.p.pv * box.c.pv;
-          fsaving = box.p.load *  box.c.pv - box.capex;
-
-          resolve({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box }); 
-          
+            resolve({ fpln:fpln,fpv:fpv,fsaving:fsaving , variable:box }); 
+        
+          });
       
       });
 
@@ -645,8 +646,11 @@ router.get('/saving/:id', function(request, response, next) {
     .then(Rxls)
     .then(recomFormula)
     .then((box) => {
-     
-      resolve(box.recomendation); 
+        return new Promise(function(resolve) {
+      
+            resolve({rec:box.recomendation}); 
+        
+        });
     });
 
     Promise.all([savingPromise,recomPromise]).then(function(values) {
