@@ -657,8 +657,16 @@ router.get('/saving/:id', function(request, response, next) {
      // console.log(values);
        fpln = values[0].p.pln * values[0].c.pln;
             fpv = values[0].p.pv * values[0].c.pv;
-          //  fsaving = box.p.load *  box.c.pv - box.capex;
-     response.send({fpln:fpln,fpv:fpv ,variable:values})
+
+          if(batcap<=20){
+            fsaving = 0;
+          }else if(20<batcap && batcap<=50){
+            fsaving = values[1].rec.fval.fpv - box.capex;
+          }else if(batcap>50){
+            fsaving = values[1].rec.fval.ftot - box.capex;
+          }
+            
+      response.send({fpln:fpln,fpv:fpv,fsaving:fsaving ,variable:values})
     });
 
 
