@@ -50,7 +50,7 @@
               </div>
           </div>
 
-          <div class="col-lg-4">
+          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <!-- small box -->
             <div class="small-box" style="background-color: white;height: 250px">
               <div class="row" style="padding: 25px">
@@ -58,7 +58,7 @@
                     <h3 style="color: black; text-align: center; font-size: 20px">Home Appliances</h3>
                     
                     <div style="padding: 30px">
-                        <img src="/App/Public/img/Home apps off.png" style="width: 35%;">
+                        <img src="/App/Public/img/Home apps off.png" style="width: 35%;max-height: 150px">
                         <!--<span class="fa fa-power-off" style="color: #e5002d; font-size: 100px; float: left;"></span>-->
 
                         <p style="float: right; font-size: 20px; color: black"><span style="font-size: 40px;" id="countSwitchOff">--</span><br>off</p>
@@ -72,7 +72,7 @@
               </div>
           </div>
 
-          <div class="col-lg-4">
+          <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <!-- small box -->
             <div class="small-box" style="background-color: white;height: 250px">
               <div class="row" style="padding: 25px">
@@ -80,7 +80,7 @@
                     <h3 style="color: black; text-align: center; font-size: 20px">Home Appliances</h3>
                     
                     <div style="padding: 30px">
-                        <img src="/App/Public/img/Home apps on.png" style="width: 35%;">
+                        <img src="/App/Public/img/Home apps on.png" style="width: 35%;max-height: 150px">
                         <!--<span class="fa fa-power-off" style="color: green; font-size: 100px; float: left;"></span>-->
 
                         <p style="float: right; font-size: 20px; color: black"><span style="font-size: 40px;" id="countSwitchOn">--</span><br>on</p>

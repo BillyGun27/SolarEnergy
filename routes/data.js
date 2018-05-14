@@ -214,8 +214,10 @@ router.get('/batcap/:id', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
-    values: [request.params.id]
+//    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = 1) * 100 )AS batcap , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+    //values: [request.params.id]
+    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+    
   }
 pool.query(query, (err, res) => {
  if (err) {
@@ -223,8 +225,9 @@ pool.query(query, (err, res) => {
    console.log(err.stack)
  } else {
 
-     result=res.rows;//.rows[0];
-   console.log(res)
+    result=res.rows[0];
+    result.batcap = 5;
+   console.log(res.rows[0]);
  }
  response.send(result);   
 })

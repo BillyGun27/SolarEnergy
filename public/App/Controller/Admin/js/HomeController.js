@@ -666,7 +666,7 @@ var HomeController = function(){
     	});
 		
 	}
-
+	
 	var dataPower;
 	var getDevice = function(isView = false){
 		
@@ -1132,7 +1132,7 @@ var HomeController = function(){
 
 
 			template += '' + 
-				'<div class="col-lg-3">' +
+				'<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">' +
 		            '<div class="small-box" style="background-color: white;">' +
 		              '<div class="row" style="padding: 25px">' +
 		                  '<div class="inner">' +

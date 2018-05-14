@@ -1,7 +1,23 @@
+<style>
+  .logo-head{
+    width: 10%
+  }
+
+  @media only screen and (max-width: 960px) {
+    /* For mobile phones: */
+    .logo-head {
+        width: 30%;
+    }
+    .logo{
+        width: 50%;
+    }
+  }
+</style>
+
   <!-- Main Header -->
   <div class="main-header">
     <!-- Logo -->
-    <a href="#" class="logo">
+    <a href="#" class="logo" style="">
       <div class="user-panel">
         <div>
           <img src="/App/Public/img/logo.png" style="width: 90%">
@@ -16,7 +32,7 @@
         <span class="sr-only">Toggle navigation</span>
       </a>
       <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu" style="width: 10%">
+      <div class="navbar-custom-menu logo-head">
         <ul class="nav navbar-nav">
           <!-- User Account Menu -->
           <li class="dropdown user user-menu">
