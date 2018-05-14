@@ -226,8 +226,51 @@ pool.query(query, (err, res) => {
  } else {
 
     result=res.rows[0];
-    result.batcap = 5;
-   console.log(res.rows[0]);
+/*
+    Varr= [12.7,
+          12.5,
+          12.42,
+          12.32,
+          12.2,
+          12.06,
+          11.9,
+          11.75,
+          11.58,
+          11.31,
+          10.5]*/
+          
+//Vres = [];
+    batcap = 0;
+//for(var i=0 ;i<11;i++){
+ // V = Varr[i];
+ V = result.v;
+    if( 12.5<=V && V <=12.7 ){
+      batcap = (50*V)-535;//V
+    }else if(12.42<=V && V<=12.5){
+      batcap = (125*V)-1473;//V
+    }else if(12.32<=V && V<=12.42){
+      batcap = (4.762*V)+11.3;
+    }else if(12.20<=V && V<=12.32){
+      batcap = (83.33*V)-956.7;
+    }else if(12.06<=V && V<=12.20){
+      batcap = (71.43*V)-811.4;
+    }else if(11.9<=V && V<=12.06){
+      batcap = (62.5*V)-703.7;
+    }else if(11.75<=V && V<=11.9){
+      batcap = (66.67*V)-753.3;
+    }else if(11.58<=V && V<=11.75){
+      batcap = (58.82*V)-661.2;
+    }else if(11.31<=V && V<=11.58){
+      batcap = (37.04*V)-408.9;
+    }else if(10.5<=V && V<=11.31){
+      batcap = (12.35*V)-129.6;
+    }
+
+    //Vres[i] = Math.round(batcap);
+  //}
+  
+    result.batcap = Math.round(batcap);//Vres;
+   //console.log(res.rows[0]);
  }
  response.send(result);   
 })
@@ -246,21 +289,35 @@ var recomCaller = function(query) {
         console.log(err.stack)
       } else {
 
-        /*
-            for (var i = 0; i < 3; i++) {
-                if(res.rows[i].tipe_energy == 'battery'){
-                  pv = res.rows[i].watt;
-                }else if(res.rows[i].tipe_energy == 'pln'){
-                  pln = res.rows[i].watt;
-                }
+             result=res.rows[0];
 
-              }
-           
-           result = {pv:pv,pln:pln}*/
-           //"" + res.rows[0].batcap ;//.rows[0];
-        //console.log(res)
-              result = res.rows;
+             batcap = 0;
      
+             V = result.v;
+              if( 12.5<=V && V <=12.7 ){
+                batcap = (50*V)-535;//V
+              }else if(12.42<=V && V<=12.5){
+                batcap = (125*V)-1473;//V
+              }else if(12.32<=V && V<=12.42){
+                batcap = (4.762*V)+11.3;
+              }else if(12.20<=V && V<=12.32){
+                batcap = (83.33*V)-956.7;
+              }else if(12.06<=V && V<=12.20){
+                batcap = (71.43*V)-811.4;
+              }else if(11.9<=V && V<=12.06){
+                batcap = (62.5*V)-703.7;
+              }else if(11.75<=V && V<=11.9){
+                batcap = (66.67*V)-753.3;
+              }else if(11.58<=V && V<=11.75){
+                batcap = (58.82*V)-661.2;
+              }else if(11.31<=V && V<=11.58){
+                batcap = (37.04*V)-408.9;
+              }else if(10.5<=V && V<=11.31){
+                batcap = (12.35*V)-129.6;
+              }
+
+              result.batcap = Math.round(batcap);
+
       }
      
     //  console.log('first method completed');
@@ -335,7 +392,7 @@ var Rxls = function(box) {
 var recomFormula = function(box) {
   var promise = new Promise(function(resolve, reject){
 
-    batcap = box.batcap[0].batcap
+    //batcap = box.batcap.batcap
     // successMessage is whatever we passed in the resolve(...) function above.
     // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
 
@@ -363,7 +420,7 @@ var recomFormula = function(box) {
         pload = 0;
       }
      
-      batcap = box.batcap[0].batcap;
+      batcap = box.batcap.batcap;
 
       //action
       recomendation="";
@@ -482,8 +539,10 @@ router.get('/rekomendasi/:id', function(request, response, next) {
   // callback//req.params
   var query=[];
   query[0] = {//battery capacity
-    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
-    values: [request.params.id]
+    //text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+    //values: [request.params.id]
+    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+    
   }
 
  query[1] = {//pload
@@ -642,8 +701,10 @@ router.get('/saving/:id', function(request, response, next) {
 
       var Rquery=[];
   Rquery[0] = {//battery capacity
-    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
-    values: [request.params.id]
+    //text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+    //values: [request.params.id]
+    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
+    
   }
 
  Rquery[1] = {//pload

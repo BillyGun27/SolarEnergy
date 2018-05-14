@@ -656,7 +656,7 @@ var HomeController = function(){
 
 	      if(service.isSuccessful()){
 	        var data = service.response();
-			var capacity = data[0].batcap;
+			var capacity = data.batcap;
 
 					$('#totalBatteryCapacity').html(capacity);
 	        	
