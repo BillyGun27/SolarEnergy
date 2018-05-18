@@ -32,7 +32,7 @@
 
                         <img src="/App/Public/img/PLN.png" style="width: 30%; float: right;">
                     </div>
-                    <div style="padding-right: 30px; padding-left: 30px">
+                    <div style="padding-right: 30px; padding-left: 30px; padding-top: 5px">
                         
                         <span style="color: black;float: left;">Solar Power</span>
                         <span style="color: black;float: right;">Grid PLN</span>
@@ -40,8 +40,8 @@
                     </div>
                     <div style="padding-right: 30px; padding-left: 30px; padding-top: 30px">
 
-                        <span id="solarPower" style="float: left;"><span class="power fa fa-toggle-on"></span></span>
-                        <span id="plnPower" style="float: right;"><span class="power fa fa-toggle-on"></span></span>
+                        <span id="solarPower" style="float: left;"><span class="power fa fa-spinner"></span></span>
+                        <span id="plnPower" style="float: right;"><span class="power fa fa-spinner"></span></span>
                     
                     </div>
                   </div>
@@ -52,13 +52,13 @@
 
           <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <!-- small box -->
-            <div class="small-box" style="background-color: white;height: 250px">
+            <div class="small-box" style="background-color: white;min-height: 250px">
               <div class="row" style="padding: 25px">
                   <div class="inner">
                     <h3 style="color: black; text-align: center; font-size: 20px">Home Appliances</h3>
                     
                     <div style="padding: 30px">
-                        <img src="/App/Public/img/Home apps off.png" style="width: 35%;max-height: 150px">
+                        <img src="/App/Public/img/Home apps off.png" style="width: 35%;">
                         <!--<span class="fa fa-power-off" style="color: #e5002d; font-size: 100px; float: left;"></span>-->
 
                         <p style="float: right; font-size: 20px; color: black"><span style="font-size: 40px;" id="countSwitchOff">--</span><br>off</p>
@@ -74,13 +74,13 @@
 
           <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <!-- small box -->
-            <div class="small-box" style="background-color: white;height: 250px">
+            <div class="small-box" style="background-color: white;min-height: 250px">
               <div class="row" style="padding: 25px">
                   <div class="inner">
                     <h3 style="color: black; text-align: center; font-size: 20px">Home Appliances</h3>
                     
                     <div style="padding: 30px">
-                        <img src="/App/Public/img/Home apps on.png" style="width: 35%;max-height: 150px">
+                        <img src="/App/Public/img/Home apps on.png" style="width: 35%;">
                         <!--<span class="fa fa-power-off" style="color: green; font-size: 100px; float: left;"></span>-->
 
                         <p style="float: right; font-size: 20px; color: black"><span style="font-size: 40px;" id="countSwitchOn">--</span><br>on</p>
@@ -100,7 +100,7 @@
 
 
         <div class="row" id="appMon">
-          Appliance Switch
+          Appliance Switch Loading..
           <!--<div class="col-lg-3">
             <div class="small-box" style="background-color: white;">
               <div class="row" style="padding: 25px">

@@ -592,18 +592,18 @@ var HomeController = function(){
 	        		if(cell.tipe_energy == 'battery'){
 
 	        			gaugeGridPower.set(cell.watt);
-	        			$('#plnStat').html(cell.watt);
+	        			$('#plnStat').html(cell.watt.toFixed(2));
 
-						$('#vPln').html(cell.v + ' V');
-						$('#iPln').html(cell.i + ' A');
+						$('#vPln').html(parseFloat(cell.v).toFixed(2) + ' V');
+						$('#iPln').html(parseFloat(cell.i).toFixed(2) + ' A');
 	        		}
 	        		else if(data[i].tipe_energy == 'pln'){
 						
 	        			gaugeSolarPower.set(cell.watt);
-	        			$('#solarStat').html(cell.watt);
+	        			$('#solarStat').html(cell.watt.toFixed(2));
 
-						$('#vSolar').html(cell.v + ' V');
-						$('#iSolar').html(+ cell.i + ' A');
+						$('#vSolar').html(parseFloat(cell.v).toFixed(2) + ' V');
+						$('#iSolar').html(parseFloat(cell.i).toFixed(2) + ' A');
 	        		}
 	        	}
 			}
@@ -666,7 +666,7 @@ var HomeController = function(){
     	});
 		
 	}
-	
+
 	var dataPower;
 	var getDevice = function(isView = false){
 		
@@ -787,11 +787,11 @@ var HomeController = function(){
 		      },
 		      ticks: {
                 min: 0,
-                callback: function(value, index, values) {
+                /*callback: function(value, index, values) {
                     if (Math.floor(value) === value) {
                         return value;
                     }
-                }
+                }*/
               }
 		    }],
 		    xAxes: [{
@@ -886,7 +886,7 @@ var HomeController = function(){
 			if(cell.tipe_energy == 'battery'){
 				totalSolarKwh += cell.kwh;
 
-				point.battery.push(cell.kwh);
+				point.battery.push(cell.kwh.toFixed(2));
 				if(stat == 'day'){
 					label.battery.push(cell.hour);
 				}
@@ -903,7 +903,7 @@ var HomeController = function(){
 			else if(cell.tipe_energy == 'pln'){
 				totalPlnKwh += cell.kwh;
 
-				point.pln.push(cell.kwh);
+				point.pln.push(cell.kwh.toFixed(2));
 				if(stat == 'day'){
 					label.pln.push(cell.hour);
 				}
@@ -921,7 +921,7 @@ var HomeController = function(){
 			else if(cell.tipe_energy == 'load'){
 				totalLoadKwh += cell.kwh;
 
-				point.load.push(cell.kwh);
+				point.load.push(cell.kwh.toFixed(2));
 				if(stat == 'day'){
 					label.load.push(cell.hour);
 				}
