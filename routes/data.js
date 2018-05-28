@@ -281,8 +281,8 @@ pool.query(query, (err, res) => {
 
 });
 
-
-var recomCaller = function(query) {
+//////////recommendation//////////////
+var recomCaller = function(query) {//capacity
   var promise = new Promise(function(resolve, reject){
     var result;
     pool.query(query[0], (err, res) => {
@@ -332,7 +332,7 @@ var recomCaller = function(query) {
   return promise;
 };
 
-var recomChain = function(box) {
+var recomChain = function(box) {//pload
   var promise = new Promise(function(resolve, reject){
     var result;
     pool.query(box.query[1], (err, res) => {
@@ -355,7 +355,7 @@ var recomChain = function(box) {
   return promise;
 };
 
-var Rxls = function(box) {
+var Rxls = function(box) {//xls
   var promise = new Promise(function(resolve, reject){
     var data;
 
@@ -391,7 +391,7 @@ var Rxls = function(box) {
   return promise;
 };
 
-var recomFormula = function(box) {
+var recomFormula = function(box) {//count
   var promise = new Promise(function(resolve, reject){
 
     //batcap = box.batcap.batcap
@@ -520,6 +520,7 @@ var recomFormula = function(box) {
       }
 
       action.push(data);
+
     }
 
 
@@ -567,6 +568,7 @@ router.get('/rekomendasi/:id', function(request, response, next) {
 
 });
 
+////////SAVING////////////////////
 var savingCaller = function(query) {
   var promise = new Promise(function(resolve, reject){
     var result;
@@ -674,6 +676,295 @@ var Cxls = function(box) {
   });
   return promise;
 };
+//////////////////////////////////////////////
+
+///////recomall///////////////////////////////
+var RAxls = function(box) {//xls
+  var promise = new Promise(function(resolve, reject){
+    var data;
+
+        node_xj({
+          input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
+          output: null, // output json 
+          lowerCaseHeaders:true
+        }, function(err, result) {
+          if(err) {
+            data = err;
+            //console.error(err);
+          } else {
+            data = result;
+           // console.log(result);
+          }
+            //"date":"12/21/17"dat =
+      //datmin = request.query.min;//request.body.min; 
+      //datmax = request.query.max;//request.body.max;
+      //   var output= jsonQuery('[*  tanggal='+ind.format('D')+' ]', {
+       //    data: data
+        // }).value
+      
+   //      response.send(output); 
+        // response.send(data); 
+      //  c = {pln:output[0]['c pln'],pv:output[0]['c pv']}
+        
+        resolve({batcap:box.batcap,c:data,pload:box.pload});  
+         
+      });
+   
+      
+  });
+  return promise;
+};
+
+var recomAllFormula = function(box) {//count
+  var promise = new Promise(function(resolve, reject){
+
+    //batcap = box.batcap.batcap
+    // successMessage is whatever we passed in the resolve(...) function above.
+    // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+
+    action = [];
+    dayArr = [];
+    daytoken = 0;
+    fday = 0;
+    for(var i=0; i<box.c.length ; i++){
+    //i=0;
+
+    cpv =0;// box.c[i]["c pv"];
+    cg =0; //box.c[i]["c pln"];
+    if (box.c[i].hasOwnProperty('c pln')) {
+      // do something
+      cg =box.c[i]['c pln'];
+    }
+
+    if (box.c[i].hasOwnProperty('c pv')) {
+      // do something
+      cpv =box.c[i]['c pv'];
+    }
+
+     
+      if(i < box.pload.length){
+        pload = box.pload[i].watt;
+      }else{
+        pload = 0;
+      }
+     
+      batcap = box.batcap.batcap;
+
+      //action
+      recomendation="";
+      ftot={};
+      if(parseFloat(cg) == parseFloat(cpv) ){
+        chigh ="equal";
+        if(batcap<=20){
+          ftot = pload * parseFloat(cg);
+
+          fval=0;//ftot;//{ftot:ftot};
+          recomendation="grid";
+        }else if(20<batcap && batcap<=50){
+          ftot=( ( (0.4)*pload*parseFloat(cg) )+ ( (0.6)*pload*parseFloat(cpv) ) );
+          fg=( (0.4)*pload*parseFloat(cg) );
+          fpv=( (0.6)*pload*parseFloat(cpv) );
+
+         //fval={ftot:ftot,fg:fg,fpv:fpv};
+         fval =fpv; // Math.min(ftot, fg,fpv);
+         /*
+         if(Math.min(ftot, fg,fpv) == ftot ){
+           //recomendation="kombinasi";
+          // fval = ftot;
+         }else if(Math.min(ftot, fg,fpv) == fg ){
+           //recomendation="grid";
+
+         }else if(Math.min(ftot, fg,fpv) == fpv ){
+           //recomendation="pv";
+         }*/
+        }else if(batcap>50){
+          ftot = pload * parseFloat(cpv);
+
+          fval=ftot;//{ftot:ftot};
+          //recomendation="pv";
+        }
+      }else if(parseFloat(cg) > parseFloat(cpv)){
+        chigh = "cg";
+        if(batcap<=20){
+          ftot = pload * parseFloat(cg);
+
+          fval=0;//{ftot:ftot};
+          //recomendation="grid";
+        }else if(20<batcap && batcap<=50){
+          ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
+          fg=( (0.5)*pload*parseFloat(cg) );
+          fpv=( (0.5)*pload*parseFloat(cpv) );
+
+          //fval={ftot:ftot,fg:fg,fpv:fpv};
+          fval = fpv;//Math.min(ftot, fg,fpv);
+          /*
+          if(Math.min(ftot, fg,fpv) == ftot ){
+            //recomendation="kombinasi";
+           // fval = ftot;
+          }else if(Math.min(ftot, fg,fpv) == fg ){
+            //recomendation="grid";
+
+          }else if(Math.min(ftot, fg,fpv) == fpv ){
+            //recomendation="pv";
+          }*/
+        }else if(batcap>50){
+          ftot = pload * parseFloat(cpv);
+
+          fval=ftot;//{ftot:ftot};
+         recomendation="pv";
+        }
+      }else {
+        chigh = "cpv";
+        if(batcap<=20){
+          ftot = pload * parseFloat(cg);
+
+          fval=0;//{ftot:ftot};
+          recomendation="grid";
+        }else if(20<batcap && batcap<=50){
+          ftot=( ( (0.5)*pload*parseFloat(cg) )+ ( (0.5)*pload*parseFloat(cpv) ) );
+          fg=( (0.5)*pload*parseFloat(cg) );
+          fpv=( (0.5)*pload*parseFloat(cpv) );
+
+          //fval={ftot:ftot,fg:fg,fpv:fpv};
+          fval = fpv;//Math.min(ftot, fg,fpv);
+          /*
+          if(Math.min(ftot, fg,fpv) == ftot ){
+            //recomendation="kombinasi";
+           // fval = ftot;
+          }else if(Math.min(ftot, fg,fpv) == fg ){
+            //recomendation="grid";
+
+          }else if(Math.min(ftot, fg,fpv) == fpv ){
+            //recomendation="pv";
+          }*/
+
+
+        }else if(batcap>50){
+          ftot = pload * parseFloat(cpv);
+
+          fval=0;//ftot;//{ftot:ftot};
+         // recomendation="pv";
+        }
+
+      }
+
+      
+      if(daytoken == 0 ){
+        daytoken = box.pload[i].day;
+      }
+
+     // if(daytoken == box.pload[i+1].day ){
+        fday+=fval;
+      //}
+
+      if(i < box.pload.length-1){
+
+        if(daytoken != box.pload[i+1].day){
+          data = {
+            day : box.pload[i].day,
+            week : box.pload[i].week,
+            month : box.pload[i].month,
+            year : box.pload[i].year,
+            fval:fday,
+          }
+          dayArr.push(data);
+  
+          daytoken = box.pload[i+1].day;
+          fday=0;
+         
+          }
+
+      }else if(i == box.pload.length-1 ){
+          data = {
+            day : box.pload[i].day,
+            week : box.pload[i].week,
+            month : box.pload[i].month,
+            year : box.pload[i].year,
+            fval:fday,
+          }
+          dayArr.push(data);
+  
+          daytoken = box.pload[i].day;
+          fday=0;
+         
+      }
+      
+       
+    
+
+    }
+
+
+    weekArr = [];
+    weektoken = 0;
+    fweek = 0;
+    fall = 0;
+    for(var i=0; i<dayArr.length ; i++){
+
+      if(weektoken == 0 ){
+        weektoken = dayArr[i].week;
+      }
+
+    
+        fweek += dayArr[i].fval;
+        fall += dayArr[i].fval;
+    
+
+      if(i < dayArr.length-1){
+
+        if(weektoken != dayArr[i+1].week){
+          data = {
+            week : dayArr[i].week,
+            month : dayArr[i].month,
+            year : dayArr[i].year,
+            fval:fweek,
+          }
+          weekArr.push(data);
+  
+          weektoken = dayArr[i+1].week;
+          fweek=0;
+          //console.log("week"+weektoken);
+          //console.log(dayArr[i].week);
+          }
+
+      }else if(i == dayArr.length-1 ){
+          data = {
+            week : dayArr[i].week,
+            month : dayArr[i].month,
+            year : dayArr[i].year,
+            fval:fweek,
+          }
+          weekArr.push(data);
+  
+          weektoken = dayArr[i].week;
+          fweek=0;
+
+          //console.log("Sa");
+          //console.log(dayArr[i].week);
+      }
+
+
+    }
+
+    action.push(dayArr);
+    action.push(weekArr);
+
+    data = {
+      year : dayArr[0].year,
+      fval:fall,
+    }
+
+    action.push(data);
+
+        resolve({recomendation:action});  
+         
+    
+   
+      
+  });
+  return promise;
+};
+//////////////////////////////////////////////
 
 //SELECT DISTINCT ON(tipe_energy) id,tipe_energy , v::float*i::float AS watt, v,i, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time  FROM energy ORDER BY tipe_energy ,receive_date DESC,receive_time DESC
 router.get('/saving/:id', function(request, response, next) {
@@ -718,22 +1009,38 @@ router.get('/saving/:id', function(request, response, next) {
  Rquery[1] = {//pload
    //text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= (SELECT date_part('day', receive_date::date )AS day FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
    //text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' AND date_part('day', receive_date::date )= "+ind.format('D')+" AND date_part('month', receive_date::date )= "+ind.format('M')+" GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ",
-    text:"SELECT tipe_energy ,SUM( v::float*i::float) AS watt , date_part('year', receive_date::date )AS year FROM energy WHERE tipe_energy = 'load' GROUP BY year,tipe_energy ORDER BY year ASC"
+   // text:"SELECT tipe_energy ,SUM( v::float*i::float) AS watt , date_part('year', receive_date::date )AS year FROM energy WHERE tipe_energy = 'load' GROUP BY year,tipe_energy ORDER BY year ASC"
+   text:"SELECT tipe_energy ,SUM( v::float*i::float) AS watt,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('week', receive_date::date )AS week, date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'load' GROUP BY hour, week ,day,month,year,receive_date,tipe_energy ORDER BY receive_date , hour ASC"
   }
 
   var recomPromise =  recomCaller(Rquery)
     .then(recomChain)
-    .then(Rxls)
-    .then(recomFormula)
+    .then(RAxls)
+    .then(recomAllFormula)
     .then((box) => {
         return new Promise(function(resolve) {
             //console.log(box.recomendation);
-           //hour = ind.format('H')-1;
-           //if(hour<0){
-           //  hour = 23;
-           //}
+           day = ind.format('D');
+           curday = 0;
+           for ( i = 0; i < box.recomendation[0].length; i++) {
+            if(day == box.recomendation[0].day ){
+               curday = i;
+            }
+            
+          }
+
+
+           week = ind.weeks();
+           curweek  = 0;
+           for ( i = 0; i < box.recomendation[1].length; i++) {
+             if(week == box.recomendation[1].week ){
+                curweek = i;
+             }
+             
+           }
+
           // console.log( ind.format('H') );
-            resolve({rec:box.recomendation[0]}); 
+            resolve({rec:[ box.recomendation[0][curday] , box.recomendation[1][curweek] , box.recomendation[2] ] }); 
         
         });
     });
@@ -743,15 +1050,12 @@ router.get('/saving/:id', function(request, response, next) {
             fpln = values[0].p.pln * values[0].c.pln;
             fpv = values[0].p.pv * values[0].c.pv;
 
-          if(batcap<=20){
-            fsaving = 0;
-          }else if(20<batcap && batcap<=50){
-            fsaving = values[1].rec.fval.fpv - values[0].capex;
-          }else if(batcap>50){
-            fsaving = values[1].rec.fval.ftot - values[0].capex;
-          }
+       
+            fsavingday = values[1].rec[0].fval - values[0].capex;
+            fsavingweek = values[1].rec[1].fval - values[0].capex;
+            fsavingyear = values[1].rec[2].fval - values[0].capex;
             
-      response.send({fpln:fpln,fpv:fpv,fsaving:fsaving ,variable:values})
+      response.send({fpln:fpln,fpv:fpv ,fsaving: fsavingday,fsavingweek:fsavingweek,fsavingyear: fsavingyear ,variable:values})
     });
 
 

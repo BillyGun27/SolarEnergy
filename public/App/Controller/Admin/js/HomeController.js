@@ -589,7 +589,7 @@ var HomeController = function(){
 	        if(data != null && data.length > 0){
 	        	for(var i = 0; i < data.length; i++){
 	        		var cell = data[i];
-	        		if(cell.tipe_energy == 'battery'){
+	        		if(cell.tipe_energy == 'pln'){
 
 	        			gaugeGridPower.set(cell.watt);
 	        			$('#plnStat').html(cell.watt.toFixed(2));
@@ -597,7 +597,7 @@ var HomeController = function(){
 						$('#vPln').html(parseFloat(cell.v).toFixed(2) + ' V');
 						$('#iPln').html(parseFloat(cell.i).toFixed(2) + ' A');
 	        		}
-	        		else if(data[i].tipe_energy == 'pln'){
+	        		else if(data[i].tipe_energy == 'battery'){
 						
 	        			gaugeSolarPower.set(cell.watt);
 	        			$('#solarStat').html(cell.watt.toFixed(2));
