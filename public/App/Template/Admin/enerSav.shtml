@@ -82,8 +82,15 @@
                     </div>
                     <div class="col-lg-8">
                       <h3 style="color: black; font-size: 36px; text-align: center;">Saving</h3>
-                      
+
+                      <h3 style="color: black; font-size: 36px; text-align: center;">Day</h3>
                       <p style="color: black; font-size: 36px; text-align: center;">Rp. <span id="costSaving">--</span></p>
+
+                      <h3 style="color: black; font-size: 36px; text-align: center;">Week</h3>
+                      <p style="color: black; font-size: 36px; text-align: center;">Rp. <span id="costSavingWeek">--</span></p>
+
+                      <h3 style="color: black; font-size: 36px; text-align: center;">Year</h3>
+                      <p style="color: black; font-size: 36px; text-align: center;">Rp. <span id="costSavingYear">--</span></p>
                     </div>
 
                   </div>

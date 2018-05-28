@@ -441,10 +441,16 @@ var HomeController = function(){
 	        var costPln = data.fpln.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	        var costSolar = data.fpv.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	        var costSaving = data.fsaving.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+			var costSavingWeek = data.fsavingweek.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+			var costSavingYear = data.fsavingyear.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+
 
 	        $('#costPln').html(costPln);
 	        $('#costSolar').html(costSolar);
-	        $('#costSaving').html(costSaving);
+			$('#costSaving').html(costSaving);
+			$('#costSavingWeek').html(costSavingWeek);
+			$('#costSavingYear').html(costSavingYear);
+			
 	      }
 
     	});
