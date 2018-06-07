@@ -245,7 +245,12 @@ pool.query(query, (err, res) => {
     batcap = 0;
 //for(var i=0 ;i<11;i++){
  // V = Varr[i];
- V = result.v;
+ V = 0;
+             if (result.hasOwnProperty('v')) {
+              // do something
+              V = result.v;
+            }
+            
     if( 12.5<=V && V <=12.7 ){
       batcap = (50*V)-535;//V
     }else if(12.42<=V && V<=12.5){
@@ -294,8 +299,13 @@ var recomCaller = function(query) {//capacity
              result=res.rows[0];
 
              batcap = 0;
-     
-             V = result.v;
+             V = 0;
+             if (result.hasOwnProperty('v')) {
+              // do something
+              V = result.v;
+            }
+
+             
               if( 12.5<=V && V <=12.7 ){
                 batcap = (50*V)-535;//V
               }else if(12.42<=V && V<=12.5){
