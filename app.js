@@ -20,6 +20,8 @@ client.on('connect', function () {
   client.subscribe('solarenergy/machine/battery')
   client.subscribe('solarenergy/energy/pln')
   client.subscribe('solarenergy/energy/battery')
+  client.subscribe('solarenergy/energy/load')
+  client.subscribe('solarenergy/battery')
  
  // client.publish('solarenergy/machine/battery','0')
 // client.publish('solarenergy/energy/battery','{"v":5,"i":0.5}')
@@ -75,6 +77,12 @@ client.on('message', function (topic, message) {
    // console.log(checkmqtt);
       Sendpgsql(table,content,message,ind,type);
        break;
+    case "solarenergy/battery":
+       table = "battery"
+       content = "v";
+     //  console.log(topic,"+",message.toString());
+       Sendpgsql(table,content,message,ind);
+        break;
    
  }
   
@@ -93,12 +101,20 @@ function Sendpgsql(table,content,message,ind,type){
       values: [ power.v, power.i  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss') , type ]//heroku
       // values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]//my comp
     }
-  }else{
+  }else if(table=="mesin"){
     var query = {
       // give the query a unique name
       name: table,
       text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time,tipe_mesin) VALUES ($1,$2,$3,$4) ',
       values: [  message.toString()  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss') , type ]//heroku
+      // values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]//my comp
+    }
+  }else if(table=="battery"){
+    var query = {
+      // give the query a unique name
+      name: table,
+      text: 'INSERT INTO ' + table+ '('+ content +' ,receive_date,receive_time) VALUES ($1,$2,$3) ',
+      values: [  message.toString()  ,ind.format('MM/DD/YY'),ind.format('HH:mm:ss') ]//heroku
       // values: [  message.toString()  ,ind.format('DD/MM/YY'),ind.format('HH:mm:ss')]//my comp
     }
   }
