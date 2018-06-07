@@ -31,7 +31,7 @@ pool.query(query, (err, res) => {
    console.log(err.stack)
  } else {
      result=res.rows;//.rows[0];
-   console.log(res)
+   //console.log(res)
  }
  response.send(result);   
 })
@@ -143,7 +143,7 @@ pool.query(query, (err, res) => {
    console.log(err.stack)
  } else {
      result=res.rows;//.rows[0];
-   console.log(res)
+   //console.log(res)
  }
  response.send(result);   
 })
@@ -154,7 +154,7 @@ pool.query(query, (err, res) => {
 
 router.post('/upload', formidable(), function(request, response, next) {
   // callback
-console.log(JSON.stringify(request.files) );
+//console.log(JSON.stringify(request.files) );
 var file = request.files.thumbnail;
 //var ext = str.split(".");
 oldpath = file.path;
@@ -185,7 +185,7 @@ router.get('/xls', function(request, response, next) {
       console.error(err);
     } else {
       data = result;
-      console.log(result);
+      //console.log(result);
     }
     /**
      * var data = {
@@ -250,7 +250,7 @@ pool.query(query, (err, res) => {
               // do something
               V = result.v;
             }
-            
+
     if( 12.5<=V && V <=12.7 ){
       batcap = (50*V)-535;//V
     }else if(12.42<=V && V<=12.5){

@@ -25,6 +25,7 @@ client.on('connect', function () {
  
  // client.publish('solarenergy/machine/battery','0')
 // client.publish('solarenergy/energy/battery','{"v":5,"i":0.5}')
+//client.publish('solarenergy/battery','12.777')
 })
  
 
