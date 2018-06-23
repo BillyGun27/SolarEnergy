@@ -1057,13 +1057,13 @@ router.get('/saving/:id', function(request, response, next) {
 
     Promise.all([savingPromise,recomPromise]).then(function(values) {
      // console.log(values);
-            fpln = values[0].p.pln * values[0].c.pln;
-            fpv = values[0].p.pv * values[0].c.pv;
+            fpln = values[0].p.pln * values[0].c.pln / 1000;
+            fpv = values[0].p.pv * values[0].c.pv / 1000;
 
        
-            fsavingday = values[1].rec[0].fval - values[0].capex;
-            fsavingweek = values[1].rec[1].fval - values[0].capex;
-            fsavingyear = values[1].rec[2].fval - values[0].capex;
+            fsavingday = (values[1].rec[0].fval - values[0].capex) / 1000;
+            fsavingweek = (values[1].rec[1].fval - values[0].capex) / 1000;
+            fsavingyear = (values[1].rec[2].fval - values[0].capex) / 1000;
             
       response.send({fpln:fpln,fpv:fpv ,fsaving: fsavingday,fsavingweek:fsavingweek,fsavingyear: fsavingyear ,variable:values})
     });
