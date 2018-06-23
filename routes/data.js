@@ -642,7 +642,7 @@ var savingChain = function(box) {
 var Cxls = function(box) {
   var promise = new Promise(function(resolve, reject){
     var data;
-
+    var D=23,H=22;
         node_xj({
           input: path.join( __dirname  ,'../xls/'+ "sample_data.xls"),  // input xls 
           output: null, // output json 
@@ -656,9 +656,9 @@ var Cxls = function(box) {
          //   console.log(result);
           }
             //"date":"12/21/17"dat =
-      //datmin = request.query.min;//request.body.min; 
-      //datmax = request.query.max;//request.body.max;
-         var output= jsonQuery('[* jam='+ind.format('H')+' & tanggal='+ind.format('D')+' ]', {
+      //datmin = request.query.min;//request.body.min; ind.format('H')
+      //datmax = request.query.max;//request.body.max;ind.format('D')
+         var output= jsonQuery('[* jam='+H+' & tanggal='+D+' ]', {
            data: data
          }).value
       
