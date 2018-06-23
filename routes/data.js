@@ -1057,8 +1057,8 @@ router.get('/saving/:id', function(request, response, next) {
 
     Promise.all([savingPromise,recomPromise]).then(function(values) {
      // console.log(values);
-            fpln = values[0].p.pln * values[0].c.pln / 1000;
-            fpv = values[0].p.pv * values[0].c.pv / 1000;
+            fpln = (values[0].p.pln * values[0].c.pln) / 1000;
+            fpv = (values[0].p.pv * values[0].c.pv) / 1000;
 
        
             fsavingday = (values[1].rec[0].fval - values[0].capex) / 1000;
