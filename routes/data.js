@@ -1034,24 +1034,26 @@ router.get('/saving/:id', function(request, response, next) {
            day = ind.format('D');
            curday = 0;
            for ( i = 0; i < box.recomendation[0].length; i++) {
-            if(day == box.recomendation[0].day ){
+            if(day == box.recomendation[0][i].day ){
                curday = i;
             }
             
           }
 
-
+          //console.log("start week");
            week = ind.weeks();
            curweek  = 0;
            for ( i = 0; i < box.recomendation[1].length; i++) {
-             if(week == box.recomendation[1].week ){
+            //console.log(week + "==" + box.recomendation[1][i].week);
+             if(week == box.recomendation[1][i].week ){
                 curweek = i;
+              //  console.log("get week");
              }
              
            }
 
           // console.log( ind.format('H') );
-            resolve({rec:[ box.recomendation[0][curday] , box.recomendation[1][curweek] , box.recomendation[2] ], all :box.recomendation,week: ind.weeks(),blength:curweek }); 
+            resolve({rec:[ box.recomendation[0][curday] , box.recomendation[1][curweek] , box.recomendation[2] ] }); 
         
         });
     });
