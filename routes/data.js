@@ -735,20 +735,20 @@ var recomAllFormula = function(box) {//count
     action = [];
     dayArr = [];
     daytoken = 0;
-    fday = 0;
-    for(var i=0; i<box.c.length ; i++){
+    fday = 0;//box.c.length
+    for(var i=0; i< box.pload.length; i++){
     //i=0;
 
     cpv =0;// box.c[i]["c pv"];
     cg =0; //box.c[i]["c pln"];
-    if (box.c[i].hasOwnProperty('c pln')) {
+    if (box.c[i%30].hasOwnProperty('c pln')) {
       // do something
-      cg =box.c[i]['c pln'];
+      cg =box.c[i%30]['c pln'];
     }
 
-    if (box.c[i].hasOwnProperty('c pv')) {
+    if (box.c[i%30].hasOwnProperty('c pv')) {
       // do something
-      cpv =box.c[i]['c pv'];
+      cpv =box.c[i%30]['c pv'];
     }
 
      
