@@ -980,8 +980,9 @@ var recomAllFormula = function(box) {//count
 router.get('/saving/:id', function(request, response, next) {
   // callback//req.params
       var query=[];
-       query[0] = {//total watt
-        text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt FROM energy GROUP BY tipe_energy",
+       query[0] = {//total watt //month only now
+        //text: "SELECT tipe_energy ,SUM( v::float*i::float) AS watt FROM energy GROUP BY tipe_energy",
+        text:"SELECT tipe_energy ,SUM( v::float*i::float) AS watt , date_part('month', receive_date::date )AS month FROM energy WHERE date_part('month', receive_date::date ) = "+ind.format('M')+" GROUP BY month, tipe_energy",
       }
 
       query[1] = {//capex
