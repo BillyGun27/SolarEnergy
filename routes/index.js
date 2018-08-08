@@ -24,6 +24,16 @@ router.get('/', function(request, response, next) {
   //response.send(ind.format('l') +"clock"+ ind.format('HH:mm:ss'));
 });
 
+
+router.get('/account/login', function(request, response, next) {
+ 
+  response.sendFile(path.join( __dirname  ,'../public/App/Controller/Auth/login.html'));
+//  var ind = moment().tz("Asia/Jakarta")
+//console.log(moment.locale());         // en
+//console.log(moment().format('LT'));   // 11:34 AM
+  //response.send(ind.format('l') +"clock"+ ind.format('HH:mm:ss'));
+});
+
 router.get('/root/hargalistrik', function(request, response, next) {
  
   response.sendFile(path.join( __dirname  ,'../public/App/Controller/root/uploadHargaListrik.html'));
