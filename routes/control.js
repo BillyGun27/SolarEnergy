@@ -42,8 +42,8 @@ router.post('/update', function(request, response, next) {
   // callback//req.params
   var result;
   var query = {
-    text: "UPDATE switch SET nama_switch = $2 WHERE id=$1;",
-    values: [request.body.id,request.body.nama]
+    text: "UPDATE switch SET nama_switch = $2 , daya = $3 , lama_pakai = $4 WHERE id = $1;",
+    values: [request.body.id, request.body.nama, request.body.daya, request.body.lama_pakai ]
   }
 pool.query(query, (err, res) => {
  if (err) {
