@@ -397,6 +397,8 @@ var HomeController = function(){
 		var data = {
 			id: id,
 			nama: $('#editvalue-' + id).val(),
+			daya: 10,
+			lama_pakai: 5,
 		}
 
 
