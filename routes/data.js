@@ -1018,6 +1018,13 @@ router.get('/saving/:id', function(request, response, next) {
       
       });
 
+      var h;
+      if(ind.format('H') == 0){
+        h = 24;
+      }else{
+        h = ind.format('H');
+      }
+
       var Rquery=[];
   Rquery[0] = {//battery capacity
     //text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v::float*i::float AS watt, (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) AS battery,( v::float*i::float / (SELECT (kapasitas_baterai::float *tegangan_baterai::float) FROM public.user_account WHERE id  = $1) * 100 )AS batcap, to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
@@ -1025,7 +1032,7 @@ router.get('/saving/:id', function(request, response, next) {
 
 //    text: "SELECT DISTINCT ON(tipe_energy) id,tipe_energy  , v , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM energy WHERE tipe_energy = 'battery'  ORDER BY tipe_energy ,receive_date DESC,receive_time DESC ",
   
-    text: "SELECT v , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM battery WHERE date_part('day', receive_date::date )= "+ind.format('D')+" AND date_part('month', receive_date::date )= "+ind.format('M')+" AND date_part('hour', receive_time::time )= "+ind.format('H')+" ORDER BY receive_time DESC LIMIT 1"
+    text: "SELECT v , to_char(receive_date, 'YY/MM/DD') AS receive_date,receive_time FROM battery WHERE date_part('day', receive_date::date )= "+ind.format('D')+" AND date_part('month', receive_date::date )= "+ind.format('M')+" AND date_part('hour', receive_time::time )= "+h+" ORDER BY receive_time DESC LIMIT 1"
 
   }
 
