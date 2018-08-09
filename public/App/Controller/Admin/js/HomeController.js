@@ -116,7 +116,6 @@ var HomeController = function(){
 		if(menu == 'home'  || menu == ''){
 			getCountDevice();
 			getLoadPower(jenisDay);
-			totalBatteryCapacity();
 		}
 		else if(menu == 'enerAss'){
 		}
@@ -211,7 +210,6 @@ var HomeController = function(){
                   '<div class="box-body table-responsive no-padding">'+
                     '<table class="table table-hover" id="table0">'+
                       '<tr>'+
-                        '<th>No</th>'+
                         '<th>Jam Ke-</th>'+
                         '<th>Rekomendasi</th>'+
                         '<th>Action</th>'+
@@ -241,7 +239,6 @@ var HomeController = function(){
 
 				templateBody += ''+
 					'<tr>'+
-						'<td>' + (j+1) + '</td>'+
 						'<td>' + data[j].jam + '</td>'+
 						'<td><span class="label label-'+ bgStatus +'">' + txStatus + '</span></td>'+
 						'<td><button class="apply label btn btn-default" id="apply-' + j + '-' + data[j].recomendation + '">Apply</button></td>'+
@@ -253,7 +250,8 @@ var HomeController = function(){
 			container.html(contain);	
 
 			$('.apply').click(function(e){
-				var id = e.target.id.replace('apply-', '')
+				var id = e.target.id.replace('apply-', '');
+				console.log(id);
 				applyAppliance(id);
 			});
 	}
@@ -318,7 +316,7 @@ var HomeController = function(){
 	var setApply = function(id){
 		service.start({
 	      type: 'get', 
-	      uri: App.baseAPI() + '/control/switch/power/',
+	      uri: App.baseAPI() + '/control/switch/power/'+id,
 	      timeout: 60000,
 	      loading: false,
 
@@ -360,6 +358,9 @@ var HomeController = function(){
                       '<tr>'+
                         '<th>No</th>'+
                         '<th>Nama Perangkat</th>'+
+                        '<th>Status Switch</th>'+
+                        '<th>Daya (watt)</th>'+
+                        '<th>Lama Pakai (jam)</th>'+
                         '<th>Action</th>'+
                        '</tr>'
 			+ '';
@@ -368,16 +369,39 @@ var HomeController = function(){
 
 			for(var j = 0; data != null && j < data.length; j++){
 				var switchName = '';
+				var daya = 0;
+				var durasi = 0;
 				var available = 'border: 2px solid red';
+
 				if(data[j].nama_switch){
 					switchName = data[j].nama_switch;
 					available = '';
 				}
 
+				if(data[j].daya){
+					daya = data[j].daya;
+				}
+
+				if(data[j].lama_pakai){
+					durasi = data[j].lama_pakai;
+				}
+
+				if(data[j].status_switch){
+					var status = 'ON';
+					var label = 'success';
+				}
+				else{
+					var status = 'OFF';
+					var label = 'danger';
+				}
+
 				templateBody += ''+
 					'<tr>'+
 						'<td>' + (j+1) + '</td>'+
-						'<td><input id="editvalue-' + data[j].id + '" style="' + available + '"  type="text" class="form-control" value="' + switchName + '" placeholder="(Available Switch)"></td>'+
+						'<td><input id="editvalueSwitchName-' + data[j].id + '" style="' + available + '"  type="text" class="form-control" value="' + switchName + '" placeholder="(Available Switch)"></td>'+
+						'<td><span class="label label-'+ label +'">' + status + '</span></td>'+
+						'<td><input id="editvalueDaya-' + data[j].id + '" style="' + available + '"  type="number" class="form-control" value="' + daya + '" placeholder="0"></td>'+
+						'<td><input id="editvalueDurasi-' + data[j].id + '" style="' + available + '"  type="number" class="form-control" value="' + durasi + '" placeholder="0"></td>'+
 						'<td><button class="edit label btn btn-default" id="edit-' + data[j].id + '">Update</button></td>'+
 					'</tr>'
 				+'';
@@ -394,12 +418,25 @@ var HomeController = function(){
 	}
 
 	var updateAppliance = function(id){
+		var nama = $('#editvalueSwitchName-' + id).val().trim();
+		var daya = parseFloat($('#editvalueDaya-' + id).val().trim());
+		var lama_pakai = parseFloat($('#editvalueDurasi-' + id).val().trim());
+
+		if(nama == ''){
+			daya = 0;
+			lama_pakai = 0;
+		}
+
+		if(daya == '') daya = 0;
+		if(lama_pakai == '') lama_pakai = 0;
+
 		var data = {
 			id: id,
-			nama: $('#editvalue-' + id).val(),
-			daya: 10,
-			lama_pakai: 5,
+			nama: nama,
+			daya: daya,
+			lama_pakai: lama_pakai,
 		}
+		console.log(data);
 
 
 		$('#edit-' + id).html('Loading..');
@@ -443,16 +480,10 @@ var HomeController = function(){
 	        var costPln = data.fpln.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	        var costSolar = data.fpv.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	        var costSaving = data.fsaving.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-			var costSavingWeek = data.fsavingweek.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-			var costSavingYear = data.fsavingyear.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
-
 
 	        $('#costPln').html(costPln);
 	        $('#costSolar').html(costSolar);
-			$('#costSaving').html(costSaving);
-			$('#costSavingWeek').html(costSavingWeek);
-			$('#costSavingYear').html(costSavingYear);
-			
+	        $('#costSaving').html(costSaving);
 	      }
 
     	});
@@ -597,7 +628,7 @@ var HomeController = function(){
 	        if(data != null && data.length > 0){
 	        	for(var i = 0; i < data.length; i++){
 	        		var cell = data[i];
-	        		if(cell.tipe_energy == 'pln'){
+	        		if(cell.tipe_energy == 'battery'){
 
 	        			gaugeGridPower.set(cell.watt);
 	        			$('#plnStat').html(cell.watt.toFixed(2));
@@ -605,7 +636,7 @@ var HomeController = function(){
 						$('#vPln').html(parseFloat(cell.v).toFixed(2) + ' V');
 						$('#iPln').html(parseFloat(cell.i).toFixed(2) + ' A');
 	        		}
-	        		else if(data[i].tipe_energy == 'battery'){
+	        		else if(data[i].tipe_energy == 'pln'){
 						
 	        			gaugeSolarPower.set(cell.watt);
 	        			$('#solarStat').html(cell.watt.toFixed(2));
@@ -648,27 +679,6 @@ var HomeController = function(){
 					$('#countSwitchOn').html(countSwitchOn);
 	        	}
 			}
-	      }
-
-    	});
-		
-	}
-
-	var totalBatteryCapacity = function(){
-		service.start({
-	      type: 'get', 
-	      uri: App.baseAPI() + '/data/batcap/' + currentId,
-	      timeout: 60000,
-	      loading: false
-	    }, function(){
-
-	      if(service.isSuccessful()){
-	        var data = service.response();
-			var capacity = data.batcap;
-
-					$('#totalBatteryCapacity').html(capacity);
-	        	
-			
 	      }
 
     	});

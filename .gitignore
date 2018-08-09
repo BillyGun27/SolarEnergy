@@ -1,0 +1,7 @@
+App/
+vendor/
+web/
+.htaccess
+config.php
+composer.json
+composer.lock
