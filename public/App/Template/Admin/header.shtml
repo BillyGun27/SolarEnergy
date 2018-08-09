@@ -1,29 +1,32 @@
 <style>
-  .logo{
-    width: 30%
-  }
   .logo-head{
     width: 10%
   }
 
+  .logo img{
+    width: 30%;
+  }
   @media only screen and (max-width: 960px) {
     /* For mobile phones: */
     .logo-head {
-        width: 10%;
+        width: 15%;
     }
     .logo{
-        width: 10%;
+        width: 30%;
+    }
+    .logo img{
+      width: 10%;
     }
   }
 </style>
 
-  <!-- Main Header 10 30 50 90-->
+  <!-- Main Header -->
   <div class="main-header">
     <!-- Logo -->
     <a href="#" class="logo" style="">
       <div class="user-panel">
         <div>
-          <img src="/App/Public/img/logo.png" style="width: 100%">
+          <img src="/App/Public/img/logo.png" >
         </div>
       </div>
     </a>
@@ -49,7 +52,7 @@
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="/App/Public/img/logo.png" alt="User Image" style="width: 100%">
+                <img src="/App/Public/img/logo.png" alt="User Image" style="width: 50%">
 
                 <p style="color: black;">
                   Hallo, <span id="userName">UserName</span>
