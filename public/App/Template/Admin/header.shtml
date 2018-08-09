@@ -9,7 +9,7 @@
         width: 30%;
     }
     .logo{
-        width: 50%;
+        width: 30%;
     }
   }
 </style>
@@ -20,7 +20,7 @@
     <a href="#" class="logo" style="">
       <div class="user-panel">
         <div>
-          <img src="/App/Public/img/logo.png" style="width: 90%">
+          <img src="/App/Public/img/logo.png" style="width: 30%">
         </div>
       </div>
     </a>
