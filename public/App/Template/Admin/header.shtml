@@ -1,4 +1,7 @@
 <style>
+  .logo{
+    width: 30%
+  }
   .logo-head{
     width: 10%
   }
@@ -14,13 +17,13 @@
   }
 </style>
 
-  <!-- Main Header -->
+  <!-- Main Header 10 30 50 90-->
   <div class="main-header">
     <!-- Logo -->
     <a href="#" class="logo" style="">
       <div class="user-panel">
         <div>
-          <img src="/App/Public/img/logo.png" style="width: 30%">
+          <img src="/App/Public/img/logo.png" style="width: 100%">
         </div>
       </div>
     </a>
