@@ -1112,6 +1112,7 @@ router.get('/checkdate', function(request, response, next) {
 });*/
 
 ///emission
+/*
 router.get('/emission/:id', function(request, response, next) {
   // callback//req.params
   var result;
@@ -1130,6 +1131,47 @@ pool.query(query, (err, res) => {
  }
  response.send(result);   
 })
+
+});
+*/
+
+router.get('/emission/:timepart/:id', function(request, response, next) {
+  output = "SELECT ( en.kwh::float * em.ef::float ) AS emission , * FROM ("
+    if(request.params.timepart == "current"){
+      output += "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy WHERE tipe_energy = 'battery' GROUP BY day,month,year,receive_date,tipe_energy ORDER BY receive_date DESC LIMIT 1";
+    }else if(request.params.timepart == "day"){
+      output += "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('hour', receive_time::time )AS hour,date_part('day', receive_date::date )AS day,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy  WHERE tipe_energy = 'battery' AND date_part('day', receive_date::date )= "+ind.format('D')+" AND date_part('month', receive_date::date )= "+ind.format('M')+" GROUP BY hour,day,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ";
+    }else if(request.params.timepart == "week"){
+      output += "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day, date_part('week', receive_date::date )AS week ,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy WHERE tipe_energy = 'battery' AND date_part('week', receive_date::date ) = "+ind.weeks() +" GROUP BY week,month,year,receive_date,tipe_energy ORDER BY receive_date ASC ";
+    }else if(request.params.timepart == "month"){
+      output += "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day, date_part('week', receive_date::date )AS week ,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy WHERE tipe_energy = 'battery' AND date_part('month', receive_date::date ) = "+ind.format('M')+" GROUP BY month,year,receive_date,tipe_energy ORDER BY receive_date ASC ";
+    }else if(request.params.timepart == "year"){
+      output += "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year  FROM energy WHERE tipe_energy = 'battery' AND date_part('year', receive_date::date ) = (SELECT date_part('year', receive_date::date )  AS year FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY month,year,tipe_energy ORDER BY month ASC"
+    }
+
+    output += ") AS en ,( SELECT * FROM emission WHERE city = (SELECT lokasi FROM user_account WHERE id = $1 ) ) AS em "
+  //"SELECT id,do_value, to_char(receive_date, 'MM/DD/YY') AS receive_date,receive_time FROM sensor WHERE receive_date BETWEEN $1 AND $2 "
+  // callback
+  var result;//request.body.min//request.query.min 
+
+  var query = {
+    text: output,
+    values: [request.params.id]
+  }
+
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+  // console.log(res)
+ }
+ response.send(result); 
+ //console.log(request);  
+});
+
+
 
 });
 
