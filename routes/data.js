@@ -1111,5 +1111,26 @@ router.get('/checkdate', function(request, response, next) {
 
 });*/
 
+///emission
+router.get('/emission/:id', function(request, response, next) {
+  // callback//req.params
+  var result;
+  var query = {
+    text: "SELECT ( en.kwh::float * em.ef::float ) AS emission , * FROM (SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh ,date_part('year', receive_date::date )AS year  FROM energy WHERE tipe_energy='battery' AND date_part('year', receive_date::date ) = (SELECT date_part('year', receive_date::date )  AS year FROM energy ORDER BY receive_date DESC LIMIT 1)  GROUP BY year,tipe_energy ) AS en ,( SELECT * FROM emission WHERE city = (SELECT lokasi FROM user_account WHERE id = $1 ) ) AS em ;",
+    values: [request.params.id]
+  }
+
+pool.query(query, (err, res) => {
+ if (err) {
+     result = err.stack;
+   console.log(err.stack)
+ } else {
+     result=res.rows;//.rows[0];
+   console.log(res)
+ }
+ response.send(result);   
+})
+
+});
 
 module.exports = router;
