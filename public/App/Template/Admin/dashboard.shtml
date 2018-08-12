@@ -27,7 +27,7 @@
               <div class="row" style="padding: 15px">
                   <div class="inner">
                     <div class="col-lg-4 col-xs-4" style="padding: 20px">
-                        <img src="../web/App/Public/img/Home apps on.png" style="width: 150%">
+                        <img src="/App/Public/img/Home apps on.png" style="width: 150%">
                         <!---<span class="fa fa-power-off" style="color: green; font-size: 50px; float: left;"></span>-->
                     </div>
                     <div class="col-lg-8">
@@ -52,7 +52,7 @@
               <div class="row" style="padding: 15px">
                   <div class="inner">
                     <div class="col-lg-4 col-xs-4" style="padding: 20px">
-                        <img src="../web/App/Public/img/Battery Capacity.png" style="width: 150%">
+                        <img src="/App/Public/img/Battery Capacity.png" style="width: 150%">
                         <!--<span class="fa fa-battery-full" style="color: #e5002d; font-size: 50px; float: left;"></span>-->
                     </div>
                     <div class="col-lg-8">
@@ -77,7 +77,7 @@
               <div class="row" style="padding: 15px">
                   <div class="inner">
                     <div class="col-lg-4 col-xs-4" style="padding: 20px">
-                        <img src="../web/App/Public/img/Solar Energy.png" style="width: 150%">
+                        <img src="/App/Public/img/Solar Energy.png" style="width: 150%">
                         <!--<span class="fa fa-sun-o" style="color: orange; font-size: 50px; float: left;"></span>-->
                     </div>
                     <div class="col-lg-8">
@@ -102,7 +102,7 @@
               <div class="row" style="padding: 15px">
                   <div class="inner">
                     <div class="col-lg-4  col-xs-4" style="padding: 20px">
-                        <img src="../web/App/Public/img/Grid PLN.png" style="width: 150%">
+                        <img src="/App/Public/img/Grid PLN.png" style="width: 150%">
                         <!--<span class="fa fa-bolt" style="color: blue; font-size: 50px; float: left;"></span>-->
                     </div>
                     <div class="col-lg-8">
