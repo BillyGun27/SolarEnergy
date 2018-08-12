@@ -1146,7 +1146,7 @@ router.get('/emission/:timepart/:id', function(request, response, next) {
     }else if(request.params.timepart == "month"){
       output += "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,receive_date ,date_part('day', receive_date::date )AS day, date_part('week', receive_date::date )AS week ,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year FROM energy WHERE ( tipe_energy = 'battery' OR tipe_energy = 'pln' ) AND date_part('month', receive_date::date ) = "+ind.format('M')+" GROUP BY month,year,receive_date,tipe_energy ORDER BY receive_date ASC ";
     }else if(request.params.timepart == "year"){
-      output += "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year  FROM energy WHERE tipe_energy = 'battery' AND date_part('year', receive_date::date ) = (SELECT date_part('year', receive_date::date )  AS year FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY month,year,tipe_energy ORDER BY month ASC"
+      output += "SELECT tipe_energy ,SUM( v::float*i::float)/1000 AS kwh,date_part('month', receive_date::date )AS month,date_part('year', receive_date::date )AS year  FROM energy WHERE ( tipe_energy = 'battery' OR tipe_energy = 'pln' ) AND date_part('year', receive_date::date ) = (SELECT date_part('year', receive_date::date )  AS year FROM energy ORDER BY receive_date DESC LIMIT 1) GROUP BY month,year,tipe_energy ORDER BY month ASC"
     }
 
     output += ") AS en ,( SELECT * FROM emission WHERE city = (SELECT lokasi FROM user_account WHERE id = $1 ) ) AS em "
