@@ -62,6 +62,7 @@ var HomeController = function(){
 	});
 
 	var jenisDay = 'day';
+	var jenisDayEmission = 'day';
 	var isToggle = false;
 	var loop;
 	var currentAsses;
@@ -87,10 +88,12 @@ var HomeController = function(){
 
 		if(menu == 'home' || menu == ''){
 			drawGraphCompare();
+			drawGraphEmission();
 		}
 		else if(menu == 'enerAss'){
 			getAssesment();
 			getLocation();
+
 			getDaya();
 			
 			getRekomendasi();
@@ -116,6 +119,7 @@ var HomeController = function(){
 		if(menu == 'home'  || menu == ''){
 			getCountDevice();
 			getLoadPower(jenisDay);
+			getLoadEmission(jenisDayEmission);
 		}
 		else if(menu == 'enerAss'){
 		}
@@ -148,6 +152,11 @@ var HomeController = function(){
 		$('#selectDay').change(function(e){
 			jenisDay = $('#selectDay').val();
 			getLoadPower(jenisDay);
+		});
+
+		$('#selectDayEmission').change(function(e){
+			jenisDayEmission = $('#selectDayEmission').val();
+			getLoadEmission(jenisDayEmission);
 		});
 
 		$('#saveAsses').click(function(e){
@@ -1231,6 +1240,173 @@ var HomeController = function(){
 
     	});
 		
+	}
+
+	var getLoadEmission = function(stat = 'day'){
+		service.start({
+	      type: 'get', 
+	      uri: App.baseAPI() + '/data/emission/' + stat + '/' + currentId,
+	      timeout: 60000,
+	      loading: false
+	    }, function(){
+
+	      if(service.isSuccessful()){
+	        var data = service.response();
+	        if(data != null && data.length > 0){
+
+	        	setGraphEmission(data, stat);
+			}
+	      }
+
+    	});
+		
+	}
+
+
+	var graphEmission;	
+	var drawGraphEmission = function(){
+	    var lineChartData = {
+	      labels  : [],
+	      datasets: [
+	        {
+	          label               : 'Emission\'s Battery',
+	          backgroundColor 	  : '#ff3200',
+              borderColor         : '#ff3200',
+              data                : [] //point
+	        },
+	        
+	      ]
+	    };
+
+	    var lineChartOptions = {
+	    	responsive: true,
+        	animation: false,
+
+	      scales: {
+		    yAxes: [{
+		      scaleLabel: {
+		        display: true,
+		        labelString: 'Karbon (kg)'
+		      },
+		      ticks: {
+                min: 0,
+                /*callback: function(value, index, values) {
+                    if (Math.floor(value) === value) {
+                        return value;
+                    }
+                }*/
+              }
+		    }],
+		    xAxes: [{
+		      scaleLabel: {
+		        display: true,
+		        labelString: 'Date / Time'
+		      }
+		    }]
+		  },
+
+		  tooltips: {
+            mode: 'index',
+            intersect: false,
+          },
+          hover: {
+            mode: 'nearest',
+            intersect: true
+          },
+	    };
+
+	    //-------------
+	    //- LINE CHART -
+	    //--------------
+		var lineChartCanvas          = $('#lineChartEmission').get(0).getContext('2d');
+		graphEmission = new Chart(lineChartCanvas, {
+		    type: 'bar',
+		    data: lineChartData,
+		    options: lineChartOptions
+		});
+	}
+
+	var updateGraphEmission = function(stat, label = [], value = []){
+	
+		var xAxes = '';
+		if(stat == 'day'){
+			xAxes = 'Hour';
+		}
+		else if(stat == 'week'){
+			xAxes = 'Day';
+		}
+		else if(stat == 'month'){
+			xAxes = 'Day';
+		}
+		else if(stat == 'year'){
+			xAxes = 'Month';
+		}
+
+		graphEmission.data.labels = label;
+		graphEmission.options.scales.xAxes[0].scaleLabel.labelString = xAxes;
+		for(var i=0; i<value.length; i++){
+			graphEmission.data.datasets[i].data = value[i];
+		}
+		graphEmission.update();
+	}
+
+	var setGraphEmission = function(data, stat){
+		if(data == null) return;
+
+		var point = {
+			battery: []
+		};
+		var label = {
+			battery: []
+		};
+		var finalLabel = [];
+		
+		var log;
+		for(var i = 0; i < data.length; i++){
+			var cell = data[i];
+
+			if(stat == 'day'){
+				log = "Day " + cell.day + ' (' + cell.year + '/' + cell.month + ')';
+			}
+			else if(stat == 'week'){
+				log = "Week " + cell.week + ' (' + cell.year + '/' + cell.month + ')';
+			}
+			else if(stat == 'month'){
+				log = "Month " + cell.month + ' (' + cell.year + ')';
+			}
+			else if(stat == 'year'){
+				log = "Year " + cell.year;
+			}
+
+			if(cell.tipe_energy == 'battery'){
+				totalSolarKwh += cell.kwh;
+
+				point.battery.push(cell.kwh.toFixed(2));
+				if(stat == 'day'){
+					label.battery.push(cell.hour);
+				}
+				else if(stat == 'week'){
+					label.battery.push(cell.day);
+				}
+				else if(stat == 'month'){
+					label.battery.push(cell.day);
+				}
+				else if(stat == 'year'){
+					label.battery.push(cell.month);
+				}
+			}
+			
+		}
+
+		
+		finalLabel = label.battery;
+
+		updateGraphEmission(stat, finalLabel, [
+			point.battery
+		]);
+
+		$('#logEmission').html(log);
+
 	}
 
 	
