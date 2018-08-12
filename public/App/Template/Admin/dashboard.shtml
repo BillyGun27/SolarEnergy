@@ -157,6 +157,39 @@
 
             </div>
         </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+              <!-- LINE CHART -->
+              <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Emission</h3>
+                  <p id="logEmission">Log...</p>
+                  <!-- Date and time range -->
+                  <div class="form-group" style="float: right;">
+                    <div class="input-group">
+                      <select class="btn btn-default pull-right" id="selectDayEmission">
+                        <option value="day" selected>Day</option>
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- /.form group -->
+
+                </div>
+                <div class="box-body">
+                  <div class="chart">
+                    <canvas id="lineChartEmission" width="400" height="200"></canvas>
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <!-- /.box -->
+
+            </div>
+        </div>
         
 
     </section>
