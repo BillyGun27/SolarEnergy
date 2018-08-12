@@ -163,7 +163,7 @@
               <!-- LINE CHART -->
               <div class="box box-info">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Emission</h3>
+                  <h3 class="box-title">Carbon Footprint Calculator</h3>
                   <p id="logEmission">Log...</p>
                   <!-- Date and time range -->
                   <div class="form-group" style="float: right;">
