@@ -1269,10 +1269,16 @@ var HomeController = function(){
 	      labels  : [],
 	      datasets: [
 	        {
-	          label               : 'Emission\'s Battery',
+	          label               : 'Grid PLN',
 	          backgroundColor 	  : '#ff3200',
               borderColor         : '#ff3200',
               data                : [] //point
+	        },
+	        {
+	          label               : 'Photovoltaic',
+	          backgroundColor 	  : '#ffdf7a',
+              borderColor         : '#ffdf7a',
+              data                : []
 	        },
 	        
 	      ]
@@ -1354,10 +1360,12 @@ var HomeController = function(){
 		if(data == null) return;
 
 		var point = {
-			battery: []
+			battery: [],
+			pln:[]
 		};
 		var label = {
-			battery: []
+			battery: [],
+			pln:[]
 		};
 		var finalLabel = [];
 		
@@ -1395,13 +1403,36 @@ var HomeController = function(){
 					label.battery.push(cell.month);
 				}
 			}
+			else if(cell.tipe_energy == 'pln'){
+				totalPlnKwh += cell.kwh;
+
+				point.pln.push(cell.kwh.toFixed(2));
+				if(stat == 'day'){
+					label.pln.push(cell.hour);
+				}
+				else if(stat == 'week'){
+					label.pln.push(cell.day);
+				}
+				else if(stat == 'month'){
+					label.pln.push(cell.day);
+				}
+				else if(stat == 'year'){
+					label.pln.push(cell.month);
+				}
+			}
+
 			
 		}
 
-		
-		finalLabel = label.battery;
+		if(label.pln.length > label.battery.length){
+			finalLabel = label.pln;	
+		}
+		else{
+			finalLabel = label.battery;	
+		}
 
 		updateGraphEmission(stat, finalLabel, [
+			point.pln,
 			point.battery
 		]);
 
